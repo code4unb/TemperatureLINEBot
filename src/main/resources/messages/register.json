@@ -1,0 +1,61 @@
+{
+  "type": "bubble",
+  "header": {
+    "type": "box",
+    "layout": "vertical",
+    "contents": [
+      {
+        "type": "text",
+        "text": "登録",
+        "size": "20px",
+        "weight": "bold",
+        "align": "center",
+        "color": "#ffffff"
+      }
+    ],
+    "paddingAll": "0px",
+    "paddingTop": "4px"
+  },
+  "body": {
+    "type": "box",
+    "layout": "vertical",
+    "contents": [
+      {
+        "type": "text",
+        "text": "学年・クラス・番号・氏名を入力してください。",
+        "maxLines": 2,
+        "wrap": true,
+        "contents": []
+      },
+      {
+        "type": "separator",
+        "margin": "5px"
+      },
+      {
+        "type": "text",
+        "contents": [],
+        "text": "３年１組８番 畝傍太郎さんの場合 ＞",
+        "margin": "5px",
+        "size": "14px"
+      },
+      {
+        "type": "text",
+        "text": "例) 3 1 8 畝傍 太郎",
+        "size": "15px",
+        "offsetStart": "10px",
+        "margin": "5px"
+      }
+    ],
+    "paddingTop": "10px"
+  },
+  "styles": {
+    "header": {
+      "separator": true,
+      "separatorColor": "#c6c4c7",
+      "backgroundColor": "#032e42"
+    },
+    "body": {
+      "separator": true
+    }
+  }
+}
