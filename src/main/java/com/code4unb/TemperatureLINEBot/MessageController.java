@@ -1,7 +1,9 @@
 package com.code4unb.TemperatureLINEBot;
 
 import com.code4unb.TemperatureLINEBot.message.MessageHandler;
+import com.code4unb.TemperatureLINEBot.message.MessageHandlerBase;
 import com.code4unb.TemperatureLINEBot.message.ReceivedMessage;
+import com.code4unb.TemperatureLINEBot.message.SessionMessageHandler;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.linecorp.bot.model.PushMessage;
@@ -36,7 +38,10 @@ public class MessageController {
     public Message handleTextMessageEvent(MessageEvent<TextMessageContent> event){
         ReceivedMessage message = ReceivedMessage.Build(event);
         log.info("Message received :"+message.getKeyPhrase());
-        for(MessageHandler handler:MessageHandler.getHandlerInstances().values()){
+        if(SessionMessageHandler.getCurrentSession() != null && SessionMessageHandler.getCurrentSession().isOpen()){
+            return SessionMessageHandler.getCurrentSession().HandleMessage(message);
+        }
+        for(MessageHandlerBase handler:MessageHandler.getHandlerInstances().values()){
             if(handler.shouldHandle(message.getKeyPhrase())){
                 return handler.HandleMessage(message);
             }
