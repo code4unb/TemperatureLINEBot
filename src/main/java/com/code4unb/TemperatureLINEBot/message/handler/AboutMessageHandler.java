@@ -4,6 +4,8 @@ import com.code4unb.TemperatureLINEBot.TemperatureLineBotApplication;
 import com.code4unb.TemperatureLINEBot.message.Handler;
 import com.code4unb.TemperatureLINEBot.message.MessageHandler;
 import com.code4unb.TemperatureLINEBot.message.ReceivedMessage;
+import com.code4unb.TemperatureLINEBot.util.FlexJson;
+import com.linecorp.bot.model.message.FlexMessage;
 import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.model.message.TextMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,9 @@ public class AboutMessageHandler extends MessageHandler {
     }
     @Override
     public Message HandleMessage(ReceivedMessage message) {
-        return new TextMessage(TemperatureLineBotApplication.BuildProperties.toString());
+        BuildProperties prop = TemperatureLineBotApplication.BuildProperties;
+        String json = FlexJson.LoadMessageJson("about");
+        json = String.format(json, prop.getName(), prop.getVersion(), prop.getTime().toString());
+        return new FlexMessage("version:"+prop.getVersion(),FlexJson.CreateFlexContainer(json));
     }
 }
