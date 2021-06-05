@@ -1,37 +1,22 @@
 package com.code4unb.TemperatureLINEBot;
 
 import com.linecorp.bot.client.LineMessagingClient;
-import com.linecorp.bot.client.LineMessagingClientImpl;
-import com.linecorp.bot.model.PushMessage;
 import com.linecorp.bot.model.event.Event;
-import com.linecorp.bot.model.event.FollowEvent;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
-import com.linecorp.bot.model.message.FlexMessage;
 import com.linecorp.bot.model.message.TextMessage;
-import com.linecorp.bot.model.message.flex.container.FlexContainer;
-import com.linecorp.bot.model.richmenu.RichMenu;
-import com.linecorp.bot.spring.boot.LineBotAutoConfiguration;
-import com.linecorp.bot.spring.boot.LineBotProperties;
-import com.linecorp.bot.spring.boot.LineBotWebMvcBeans;
-import com.linecorp.bot.spring.boot.LineBotWebMvcConfigurer;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
-import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
-
-import lombok.Getter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.info.BuildProperties;
 
-import javax.sound.sampled.Line;
+import java.io.IOException;
+import java.util.Properties;
 
 @SpringBootApplication
 public class TemperatureLineBotApplication {
-	@Getter
-	@Autowired
-	private static BuildProperties BuildProperties;
+	public static BuildProperties BuildProperties;
 
 	@Value("${line.bot.channel-token}")
 	private static String token;
@@ -40,10 +25,18 @@ public class TemperatureLineBotApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(TemperatureLineBotApplication.class, args);
+		initialize();
 	}
 
 	private static void initialize(){
-		client = LineMessagingClient.builder(token).build();
+		//client = LineMessagingClient.builder(token).build();
+		Properties properties = new Properties();
+		try {
+			properties.load(TemperatureLineBotApplication.class.getClassLoader().getResourceAsStream("META-INF/build-info.properties"));
+			BuildProperties = new BuildProperties(properties);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@EventMapping

@@ -17,6 +17,10 @@ import com.linecorp.bot.model.message.flex.container.FlexContainer;
 import com.linecorp.bot.model.message.sender.Sender;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.info.BuildProperties;
+import org.springframework.stereotype.Controller;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -24,7 +28,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
+@Slf4j
 @LineMessageHandler
+@Controller
 public class MessageController {
     /*
     @EventMapping
@@ -36,7 +42,9 @@ public class MessageController {
     @EventMapping
     public Message handleTextMessageEvent(MessageEvent<TextMessageContent> event){
         ReceivedMessage message = ReceivedMessage.Build(event);
+        log.info("Message received :"+message.getKeyPhrase());
         for(MessageHandler handler:MessageHandler.getHandlerInstances().values()){
+            log.info(handler.getKeyPhrase());
             if(handler.shouldHandle(message.getKeyPhrase())){
                 return handler.HandleMessage(message);
             }
