@@ -32,49 +32,15 @@ import java.nio.charset.StandardCharsets;
 @LineMessageHandler
 @Controller
 public class MessageController {
-    /*
-    @EventMapping
-    public Message handleFollowEvent(FollowEvent event) {
-        return null;
-    }
-     */
-
     @EventMapping
     public Message handleTextMessageEvent(MessageEvent<TextMessageContent> event){
         ReceivedMessage message = ReceivedMessage.Build(event);
         log.info("Message received :"+message.getKeyPhrase());
         for(MessageHandler handler:MessageHandler.getHandlerInstances().values()){
-            log.info(handler.getKeyPhrase());
             if(handler.shouldHandle(message.getKeyPhrase())){
                 return handler.HandleMessage(message);
             }
         }
         return null;
-    }
-    private FlexContainer loadFlexContainer(String name){
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            return mapper.readValue(loadMessageJson(name), FlexContainer.class);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    private String loadMessageJson(String name){
-        String path = "/messages/"+name+".json";
-        try (InputStream is = getClass().getResourceAsStream(path);
-            BufferedReader br = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
-            StringBuilder result = new StringBuilder() ;
-            String str = br.readLine();
-            while(str != null){
-                result.append(str);
-                str = br.readLine();
-            }
-            return result.toString();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
     }
 }
