@@ -5,7 +5,6 @@ import com.linecorp.bot.model.message.TextMessage;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.boot.web.servlet.server.Session;
 
 import java.time.Instant;
 

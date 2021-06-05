@@ -7,12 +7,7 @@ import com.code4unb.TemperatureLINEBot.message.ReceivedMessage;
 import com.code4unb.TemperatureLINEBot.util.FlexJson;
 import com.linecorp.bot.model.message.FlexMessage;
 import com.linecorp.bot.model.message.Message;
-import com.linecorp.bot.model.message.TextMessage;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.info.BuildProperties;
-import org.springframework.core.env.Environment;
-import org.springframework.stereotype.Component;
 
 @Handler
 public class AboutMessageHandler extends MessageHandler {

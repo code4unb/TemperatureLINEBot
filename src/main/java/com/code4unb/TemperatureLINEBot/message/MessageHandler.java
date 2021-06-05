@@ -1,15 +1,14 @@
 package com.code4unb.TemperatureLINEBot.message;
 
-import com.linecorp.bot.model.message.Message;
 import io.github.classgraph.ClassGraph;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.info.BuildProperties;
-import org.springframework.stereotype.Controller;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
 public abstract class MessageHandler extends MessageHandlerBase{
