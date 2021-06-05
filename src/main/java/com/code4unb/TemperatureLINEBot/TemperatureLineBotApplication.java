@@ -18,20 +18,30 @@ import com.linecorp.bot.spring.boot.LineBotWebMvcConfigurer;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
 
+import lombok.Getter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.info.BuildProperties;
 
 import javax.sound.sampled.Line;
 
 @SpringBootApplication
 public class TemperatureLineBotApplication {
+	@Getter
+	@Autowired
+	private static BuildProperties BuildProperties;
+
 	@Value("${line.bot.channel-token}")
 	private static String token;
+
 	private static LineMessagingClient client;
+
 	public static void main(String[] args) {
 		SpringApplication.run(TemperatureLineBotApplication.class, args);
 	}
+
 	private static void initialize(){
 		client = LineMessagingClient.builder(token).build();
 	}
