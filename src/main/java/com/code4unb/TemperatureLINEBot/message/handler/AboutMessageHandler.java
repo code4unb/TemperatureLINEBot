@@ -9,6 +9,9 @@ import com.linecorp.bot.model.message.FlexMessage;
 import com.linecorp.bot.model.message.Message;
 import org.springframework.boot.info.BuildProperties;
 
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+
 @Handler
 public class AboutMessageHandler extends MessageHandler {
     public AboutMessageHandler(){
@@ -18,7 +21,7 @@ public class AboutMessageHandler extends MessageHandler {
     public Message HandleMessage(ReceivedMessage message) {
         BuildProperties prop = TemperatureLineBotApplication.BuildProperties;
         String json = FlexJson.LoadMessageJson("about");
-        json = String.format(json, prop.getName(), prop.getVersion(), prop.getTime().toString());
+        json = String.format(json, prop.getName(), prop.getVersion(), prop.getTime().atZone(ZoneId.systemDefault()).toString());
         return new FlexMessage("version:"+prop.getVersion(),FlexJson.CreateFlexContainer(json));
     }
 }
