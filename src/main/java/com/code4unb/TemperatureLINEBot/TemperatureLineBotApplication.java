@@ -12,7 +12,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.info.BuildProperties;
 
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.Properties;
+import java.util.Set;
 
 @SpringBootApplication
 public class TemperatureLineBotApplication {
@@ -30,10 +32,18 @@ public class TemperatureLineBotApplication {
 
 	private static void initialize(){
 		//client = LineMessagingClient.builder(token).build();
-		Properties properties = new Properties();
+		Properties prop1 = new Properties();
+		Properties prop2 = new Properties();
 		try {
-			properties.load(TemperatureLineBotApplication.class.getClassLoader().getResourceAsStream("META-INF/build-info.properties"));
-			BuildProperties = new BuildProperties(properties);
+			prop1.load(TemperatureLineBotApplication.class.getClassLoader().getResourceAsStream("META-INF/build-info.properties"));
+			Set keys = prop1.keySet();
+			Iterator ite = keys.iterator();
+			while(ite.hasNext()){
+				String key = (String)ite.next();
+				Object value = prop1.get(key);
+				prop2.setProperty(((String)key).replace("build.",""),(String)value);
+			}
+			BuildProperties = new BuildProperties(prop2);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
