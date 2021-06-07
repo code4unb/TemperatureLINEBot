@@ -21,7 +21,7 @@ public class TemperatureLineBotApplication {
 	public static BuildProperties BuildProperties;
 
 	@Value("${line.bot.channel-token}")
-	private static String token;
+	private String token;
 
 	private static LineMessagingClient client;
 
