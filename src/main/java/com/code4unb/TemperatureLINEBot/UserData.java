@@ -6,6 +6,9 @@ import lombok.Getter;
 @AllArgsConstructor
 public class UserData {
     @Getter
+    private String LineID;
+
+    @Getter
     private Grades Grade;
 
     @Getter
