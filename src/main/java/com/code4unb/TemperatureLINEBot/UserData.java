@@ -1,10 +1,7 @@
 package com.code4unb.TemperatureLINEBot;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
-
-import javax.naming.Name;
 
 @AllArgsConstructor
 public class UserData {
