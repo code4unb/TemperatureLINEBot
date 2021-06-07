@@ -20,7 +20,7 @@ public class CommandMessageHandler extends MessageHandler {
     }
 
     @Override
-    public Message HandleMessage(ReceivedMessage message) {
+    public Message handleMessage(ReceivedMessage message) {
         String text = String.join(",",Handlers.stream().map(x->x.getKeyPhrase()).toArray(String[]::new));
         return TextMessage.builder().text(text).build();
     }

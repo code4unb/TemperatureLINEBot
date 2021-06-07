@@ -20,8 +20,9 @@ public class AboutMessageHandler extends MessageHandler {
     public AboutMessageHandler(){
         super("About","アプリについて","version","バージョン");
     }
+
     @Override
-    public Message HandleMessage(ReceivedMessage message) {
+    public Message handleMessage(ReceivedMessage message) {
         String json = FlexJson.LoadMessageJson("about");
         json = String.format(json, buildProperties.getName(), buildProperties.getVersion(), buildProperties.getTime().atZone(ZoneId.systemDefault()).toString());
         return new FlexMessage("version:"+buildProperties.getVersion(),FlexJson.CreateFlexContainer(json));

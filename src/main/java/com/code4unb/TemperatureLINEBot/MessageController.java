@@ -26,11 +26,11 @@ public class MessageController {
         ReceivedMessage message = ReceivedMessage.Build(event);
         log.info("Message received :"+message.getKeyPhrase());
         if(SessionMessageHandler.getCurrentSession() != null && SessionMessageHandler.getCurrentSession().isOpen()){
-            return SessionMessageHandler.getCurrentSession().HandleMessage(message);
+            return SessionMessageHandler.getCurrentSession().handleMessage(message);
         }
         for(MessageHandlerBase handler: Handlers){
             if(handler.shouldHandle(message.getKeyPhrase())){
-                return handler.HandleMessage(message);
+                return handler.handleMessage(message);
             }
         }
         return null;

@@ -16,15 +16,15 @@ public class RegisterMessageHandler extends SessionMessageHandler {
     }
 
     @Override
-    protected Message HandleActivateMessage(ReceivedMessage message) {
+    protected Message handleActivateMessage(ReceivedMessage message) {
         return new FlexMessage("register",FlexJson.LoadFlexContainer("register"));
     }
 
     @Override
-    public Message HandleSessionMessage(ReceivedMessage message) {
+    public Message handleSessionMessage(ReceivedMessage message) {
         UserData userData;
         if((userData =  tryParse(message.getPhrases())) !=null){
-            Close();
+            close();
             return TextMessage.builder().text(userData.toString()+" 登録しました。 間違いがある場合は '再登録' と送信してください。").build();
         }else{
             return TextMessage.builder().text("入力に不備があります。再度入力してください。").build();

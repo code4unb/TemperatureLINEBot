@@ -22,5 +22,5 @@ public abstract class MessageHandlerBase{
         return Arrays.stream(Aliases).anyMatch(x->x.equalsIgnoreCase(phrase));
     }
 
-    public abstract Message HandleMessage(ReceivedMessage message);
+    public abstract Message handleMessage(ReceivedMessage message);
 }
