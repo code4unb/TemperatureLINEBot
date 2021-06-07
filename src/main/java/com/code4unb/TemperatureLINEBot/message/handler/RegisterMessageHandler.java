@@ -1,15 +1,15 @@
 package com.code4unb.TemperatureLINEBot.message.handler;
 
 import com.code4unb.TemperatureLINEBot.UserData;
-import com.code4unb.TemperatureLINEBot.message.Handler;
 import com.code4unb.TemperatureLINEBot.message.ReceivedMessage;
 import com.code4unb.TemperatureLINEBot.message.SessionMessageHandler;
 import com.code4unb.TemperatureLINEBot.util.FlexJson;
 import com.linecorp.bot.model.message.FlexMessage;
 import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.model.message.TextMessage;
+import org.springframework.stereotype.Component;
 
-@Handler
+@Component
 public class RegisterMessageHandler extends SessionMessageHandler {
     public RegisterMessageHandler() {
         super("登録","register");

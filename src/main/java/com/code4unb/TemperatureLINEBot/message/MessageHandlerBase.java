@@ -5,7 +5,7 @@ import lombok.Getter;
 
 import java.util.Arrays;
 
-public abstract class MessageHandlerBase {
+public abstract class MessageHandlerBase{
     @Getter
     private final String KeyPhrase;
 

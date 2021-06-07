@@ -1,6 +1,5 @@
 package com.code4unb.TemperatureLINEBot;
 
-import com.code4unb.TemperatureLINEBot.message.MessageHandler;
 import com.code4unb.TemperatureLINEBot.message.MessageHandlerBase;
 import com.code4unb.TemperatureLINEBot.message.ReceivedMessage;
 import com.code4unb.TemperatureLINEBot.message.SessionMessageHandler;
@@ -10,12 +9,18 @@ import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+
+import java.util.Set;
 
 @Slf4j
 @LineMessageHandler
 @Controller
 public class MessageController {
+    @Autowired(required = false)
+    Set<MessageHandlerBase> Handlers;
+
     @EventMapping
     public Message handleTextMessageEvent(MessageEvent<TextMessageContent> event){
         ReceivedMessage message = ReceivedMessage.Build(event);
@@ -23,7 +28,7 @@ public class MessageController {
         if(SessionMessageHandler.getCurrentSession() != null && SessionMessageHandler.getCurrentSession().isOpen()){
             return SessionMessageHandler.getCurrentSession().HandleMessage(message);
         }
-        for(MessageHandlerBase handler:MessageHandler.getHandlerInstances().values()){
+        for(MessageHandlerBase handler: Handlers){
             if(handler.shouldHandle(message.getKeyPhrase())){
                 return handler.HandleMessage(message);
             }
