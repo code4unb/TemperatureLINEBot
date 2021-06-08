@@ -3,6 +3,7 @@ package com.code4unb.TemperatureLINEBot.db;
 import com.code4unb.TemperatureLINEBot.UserData;
 import com.code4unb.TemperatureLINEBot.UserData.Grades;
 import lombok.Data;
+import lombok.With;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 
@@ -10,6 +11,7 @@ import org.springframework.data.relational.core.mapping.Column;
 public class UserDataEntity {
     @Column("id")
     @Id
+    @With
     private final String ID;
 
     //Encrypt
