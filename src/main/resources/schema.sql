@@ -1,12 +1,11 @@
-create table user_data_entity
+create table USER_DATA
 (
-    id varchar not null
-        constraint member_pk
-            primary key auto_increment,
-    line_id varchar
-    ,grade varchar
+    id serial not null
+    ,line_id text not null
+    ,grade text not null
     ,class integer
     ,number integer
-    ,first_name varchar
-    ,last_name varchar
+    ,first_name text
+    ,last_name text
+    ,primary key (id)
 );
