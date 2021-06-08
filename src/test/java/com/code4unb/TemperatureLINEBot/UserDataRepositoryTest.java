@@ -17,7 +17,7 @@ public class UserDataRepositoryTest {
 
     @Test
     void test(){
-        UserDataEntity entity = new UserDataEntity("null",new UserData("lineid_here", UserData.Grades.First,1,1,"John","Smith"));
+        UserDataEntity entity = new UserDataEntity(null,new UserData("lineid_here", UserData.Grades.First,1,1,"John","Smith"));
         UserDataEntity saved = userDataRepository.save(entity);
         Assertions.assertNotNull(saved.getID());
         Optional<UserDataEntity> found = userDataRepository.findById(saved.getID());
