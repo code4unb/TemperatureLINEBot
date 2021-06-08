@@ -1,27 +1,29 @@
 package com.code4unb.TemperatureLINEBot;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 @AllArgsConstructor
+@EqualsAndHashCode(of = {"ID"})
 public class UserData {
     @Getter
-    private String LineID;
+    private final String LineID;
+    
+    @Getter
+    private final Grades Grade;
 
     @Getter
-    private Grades Grade;
+    private final int Class_;
 
     @Getter
-    private int Class_;
+    private final int Number;
 
     @Getter
-    private int Number;
+    private final String FirstName;
 
     @Getter
-    private String FirstName;
-
-    @Getter
-    private String LastName;
+    private final String LastName;
 
     @Override
     public String toString(){
