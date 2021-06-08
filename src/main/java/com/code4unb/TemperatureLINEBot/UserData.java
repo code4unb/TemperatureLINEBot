@@ -5,11 +5,11 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 @AllArgsConstructor
-@EqualsAndHashCode(of = {"ID"})
+@EqualsAndHashCode(of = {"LineID"})
 public class UserData {
     @Getter
     private final String LineID;
-    
+
     @Getter
     private final Grades Grade;
 
