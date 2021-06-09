@@ -1,16 +1,22 @@
 package com.code4unb.TemperatureLINEBot.message.handler;
 
 import com.code4unb.TemperatureLINEBot.UserData;
+import com.code4unb.TemperatureLINEBot.db.UserDataEntity;
+import com.code4unb.TemperatureLINEBot.db.UserDataRepository;
 import com.code4unb.TemperatureLINEBot.message.ReceivedMessage;
 import com.code4unb.TemperatureLINEBot.message.SessionMessageHandler;
 import com.code4unb.TemperatureLINEBot.util.FlexJson;
 import com.linecorp.bot.model.message.FlexMessage;
 import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.model.message.TextMessage;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class RegisterMessageHandler extends SessionMessageHandler {
+    @Autowired
+    private UserDataRepository userDataRepository;
+
     public RegisterMessageHandler() {
         super("登録","register");
     }
@@ -24,6 +30,7 @@ public class RegisterMessageHandler extends SessionMessageHandler {
     public Message handleSessionMessage(ReceivedMessage message) {
         UserData userData;
         if((userData =  tryParse(message.getSource().getUserId(),message.getPhrases())) !=null){
+            userDataRepository.save(new UserDataEntity(userData));
             close();
             return TextMessage.builder().text(userData.toString()+" 登録しました。 間違いがある場合は '再登録' と送信してください。").build();
         }else{
