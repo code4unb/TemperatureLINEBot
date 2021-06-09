@@ -12,6 +12,8 @@ import com.linecorp.bot.model.message.TextMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 public class RegisterMessageHandler extends SessionMessageHandler {
     @Autowired
@@ -30,7 +32,12 @@ public class RegisterMessageHandler extends SessionMessageHandler {
     public Message handleSessionMessage(ReceivedMessage message) {
         UserData userData;
         if((userData =  tryParse(message.getSource().getUserId(),message.getPhrases())) !=null){
-            userDataRepository.save(new UserDataEntity(userData));
+            Optional<UserDataEntity> found = userDataRepository.findByLineID(userData.getLineID());
+            if(found.isPresent()){
+                userDataRepository.save(new UserDataEntity(found.get().getId(),userData));
+            }else{
+                userDataRepository.save(new UserDataEntity(userData));
+            }
             close();
             return TextMessage.builder().text(userData.toString()+" 登録しました。 間違いがある場合は '再登録' と送信してください。").build();
         }else{
