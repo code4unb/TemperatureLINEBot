@@ -1,0 +1,124 @@
+{
+  "type": "bubble",
+  "body": {
+    "type": "box",
+    "layout": "vertical",
+    "contents": [
+      {
+        "type": "text",
+        "text": "登録情報",
+        "size": "xl",
+        "weight": "bold",
+        "align": "center"
+      },
+      {
+        "type": "separator"
+      },
+      {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "box",
+            "layout": "horizontal",
+            "contents": [
+              {
+                "type": "box",
+                "layout": "baseline",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "姓",
+                    "flex": 1,
+                    "size": "sm",
+                    "color": "#aaaaaa"
+                  },
+                  {
+                    "type": "text",
+                    "text": "%s",
+                    "flex": 4
+                  }
+                ]
+              },
+              {
+                "type": "box",
+                "layout": "baseline",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "名",
+                    "flex": 1,
+                    "size": "sm",
+                    "color": "#aaaaaa"
+                  },
+                  {
+                    "type": "text",
+                    "text": "%s",
+                    "flex": 4
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "box",
+            "layout": "horizontal",
+            "contents": [
+              {
+                "type": "box",
+                "layout": "baseline",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "学年",
+                    "flex": 1,
+                    "size": "sm",
+                    "color": "#aaaaaa"
+                  },
+                  {
+                    "type": "text",
+                    "text": "%d"
+                  }
+                ]
+              },
+              {
+                "type": "box",
+                "layout": "baseline",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "学級",
+                    "flex": 1,
+                    "size": "sm",
+                    "color": "#aaaaaa"
+                  },
+                  {
+                    "type": "text",
+                    "text": "%d"
+                  }
+                ]
+              },
+              {
+                "type": "box",
+                "layout": "baseline",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "番号",
+                    "flex": 1,
+                    "size": "sm",
+                    "color": "#aaaaaa"
+                  },
+                  {
+                    "type": "text",
+                    "text": "%d"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
