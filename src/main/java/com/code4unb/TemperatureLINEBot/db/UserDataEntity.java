@@ -51,6 +51,9 @@ public class UserDataEntity {
     public UserDataEntity(String id,UserData data){
         this(id,data.getLineID(),data.getGrade(),data.getClass_(),data.getNumber(),data.getFirstName(),data.getLastName());
     }
+    public UserDataEntity(UserData data){
+        this(null,data);
+    }
     public UserData toUserData(){
         return new UserData(getLineId(),getGrade(),getClass_(),getNumber(),getFirstName(),getLastName());
     }
