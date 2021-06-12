@@ -4,8 +4,7 @@ pipeline {
     stage('checkout') {
       steps {
         sh 'chmod +x gradlew'
-        sh '''ls
-'''
+        sh 'ls'
         sh './gradlew clean'
       }
     }
@@ -45,13 +44,12 @@ pipeline {
 
     stage('deployment') {
       parallel {
-        when{
-          branch 'develop'
-        }
         stage('deploy-dev') {
+          when{
+            branch 'develop'
+          }
           steps {
-            sh '''./gradlew docker
-'''
+            sh './gradlew docker'
           }
         }
 
