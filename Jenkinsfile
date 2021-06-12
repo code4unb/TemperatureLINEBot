@@ -49,7 +49,8 @@ pipeline {
             branch 'develop'
           }
           steps {
-            sh './gradlew docker'
+            sh './gradlew docker -Pdev'
+            sh 'docker '
           }
         }
 
