@@ -6,7 +6,7 @@ pipeline {
         sh 'chmod +x gradlew'
         sh '''ls
 '''
-        sh 'gradlew clean'
+        sh './gradlew clean'
       }
     }
 
