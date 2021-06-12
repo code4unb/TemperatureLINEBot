@@ -42,7 +42,7 @@ bootBuildImage {
 }
 
 docker{
-	name "${project.group}/${project.name.toLowerCase()}"
+	name "code4unb/${project.name.toLowerCase()}"
 
 	files bootJar.archiveFile.get()
 	buildArgs(['JAR_FILE': "${bootJar.getArchiveFileName().get()}"])
