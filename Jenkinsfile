@@ -12,7 +12,7 @@ pipeline {
 
     stage('test') {
       steps {
-        sh 'gradlew test'
+        sh './gradlew test'
       }
     }
 
@@ -20,7 +20,7 @@ pipeline {
       parallel {
         stage('build-dev') {
           steps {
-            sh '''gradlew build 
+            sh '''./gradlew build 
 '''
             archiveArtifacts 'build/libs/*.jar'
           }
@@ -28,7 +28,7 @@ pipeline {
 
         stage('build-prod') {
           steps {
-            sh '''gradlew build snapshot
+            sh '''./gradlew build snapshot
 '''
             archiveArtifacts 'build/libs/*.jar'
           }
@@ -41,14 +41,14 @@ pipeline {
       parallel {
         stage('deploy-dev') {
           steps {
-            sh '''gradlew docker
+            sh '''./gradlew docker
 '''
           }
         }
 
         stage('deploy-prod') {
           steps {
-            sh 'gradlew docker snapshot'
+            sh './gradlew docker snapshot'
           }
         }
 
