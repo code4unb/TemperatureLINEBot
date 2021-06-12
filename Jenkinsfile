@@ -4,9 +4,9 @@ pipeline {
     stage('checkout') {
       steps {
         sh 'chmod +x gradlew'
-        sh 'gradlew clean'
         sh '''ls
 '''
+        sh 'gradlew clean'
       }
     }
 
