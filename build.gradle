@@ -43,9 +43,12 @@ bootBuildImage {
 
 docker{
 	name "code4unb/${project.name.toLowerCase()}"
-
+	if(project.hasProperty("dev")){
+		tag "develop"
+	}
 	files bootJar.archiveFile.get()
 	buildArgs(['JAR_FILE': "${bootJar.getArchiveFileName().get()}"])
+	noCache true
 }
 
 springBoot {
