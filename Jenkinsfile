@@ -50,7 +50,6 @@ pipeline {
           }
           steps {
             sh './gradlew docker -Pdev'
-            sh 'docker '
           }
         }
 
