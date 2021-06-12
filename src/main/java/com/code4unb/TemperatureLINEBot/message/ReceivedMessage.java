@@ -3,15 +3,11 @@ package com.code4unb.TemperatureLINEBot.message;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
 import com.linecorp.bot.model.event.source.Source;
-import jdk.internal.jline.internal.Nullable;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.Value;
+import org.springframework.lang.Nullable;
 
-import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Arrays;
-import java.util.stream.Collectors;
 
 @Value
 public class ReceivedMessage {

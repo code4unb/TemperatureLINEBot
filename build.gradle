@@ -15,16 +15,20 @@ repositories {
 }
 
 dependencies {
-	implementation group: 'io.github.classgraph', name: 'classgraph', version: '4.8.107'
-	testImplementation group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.30'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+	runtimeOnly 'com.h2database:h2'
 	implementation 'org.projectlombok:lombok:1.18.18'
-    compileOnly 'org.projectlombok:lombok:1.18.6'
-	annotationProcessor 'org.projectlombok:lombok:1.18.6'
+    compileOnly 'org.projectlombok:lombok:1.18.18'
+	annotationProcessor 'org.projectlombok:lombok:1.18.18'
 	implementation 'com.linecorp.bot:line-bot-api-client:4.3.0'
 	implementation 'com.linecorp.bot:line-bot-model:4.3.0'
 	implementation 'com.linecorp.bot:line-bot-spring-boot:4.3.0'
 	implementation 'org.springframework.boot:spring-boot-starter'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+jar {
+	enabled = false
 }
 
 test {

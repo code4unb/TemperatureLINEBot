@@ -5,7 +5,6 @@ import com.linecorp.bot.model.message.TextMessage;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.boot.web.servlet.server.Session;
 
 import java.time.Instant;
 
@@ -30,30 +29,30 @@ public abstract class SessionMessageHandler extends MessageHandlerBase{
         super(keyPhrase, aliases);
     }
 
-    protected abstract Message HandleActivateMessage(ReceivedMessage message);
+    protected abstract Message handleActivateMessage(ReceivedMessage message);
 
-    protected abstract Message HandleSessionMessage(ReceivedMessage message);
+    protected abstract Message handleSessionMessage(ReceivedMessage message);
 
     @Override
-    public final Message HandleMessage(ReceivedMessage message){
+    public final Message handleMessage(ReceivedMessage message){
         if(isOpen()){
             if(isExpired()){
-                Close();
+                close();
                 return TextMessage.builder()
                         .text("有効期限が切れています。最初からやり直してください。")
                         .build();
             }
-            Refresh();
+            refresh();
             if(message.getKeyPhrase().equalsIgnoreCase("終了")){
-                Close();
+                close();
                 return TextMessage.builder()
                         .text("セッションを終了します。")
                         .build();
             }
-            return HandleSessionMessage(message);
+            return handleSessionMessage(message);
         }else{
             Open();
-            return  HandleActivateMessage(message);
+            return  handleActivateMessage(message);
         }
     }
 
@@ -68,11 +67,11 @@ public abstract class SessionMessageHandler extends MessageHandlerBase{
         SessionMessageHandler.CurrentSession = this;
     }
 
-    protected final void Refresh(){
+    protected final void refresh(){
         refreshedDate = Instant.now();
     }
 
-    protected void Close(){
+    protected void close(){
         open = false;
     }
 }

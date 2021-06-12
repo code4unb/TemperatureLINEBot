@@ -18,10 +18,8 @@ import java.util.Set;
 
 @SpringBootApplication
 public class TemperatureLineBotApplication {
-	public static BuildProperties BuildProperties;
-
 	@Value("${line.bot.channel-token}")
-	private static String token;
+	private String token;
 
 	private static LineMessagingClient client;
 
@@ -32,21 +30,6 @@ public class TemperatureLineBotApplication {
 
 	private static void initialize(){
 		//client = LineMessagingClient.builder(token).build();
-		Properties prop1 = new Properties();
-		Properties prop2 = new Properties();
-		try {
-			prop1.load(TemperatureLineBotApplication.class.getClassLoader().getResourceAsStream("META-INF/build-info.properties"));
-			Set keys = prop1.keySet();
-			Iterator ite = keys.iterator();
-			while(ite.hasNext()){
-				String key = (String)ite.next();
-				Object value = prop1.get(key);
-				prop2.setProperty(((String)key).replace("build.",""),(String)value);
-			}
-			BuildProperties = new BuildProperties(prop2);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 
 	@EventMapping
