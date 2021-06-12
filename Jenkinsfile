@@ -19,6 +19,9 @@ pipeline {
     stage('build') {
       parallel {
         stage('build-dev') {
+          when{
+            branch 'develop'
+          }
           steps {
             sh '''./gradlew build 
 '''
@@ -27,6 +30,9 @@ pipeline {
         }
 
         stage('build-prod') {
+          when{
+                    branch 'master'
+          }
           steps {
             sh '''./gradlew build snapshot
 '''
@@ -39,6 +45,9 @@ pipeline {
 
     stage('deployment') {
       parallel {
+        when{
+          branch 'develop'
+        }
         stage('deploy-dev') {
           steps {
             sh '''./gradlew docker
@@ -47,6 +56,9 @@ pipeline {
         }
 
         stage('deploy-prod') {
+          when{
+            branch 'master'
+          }
           steps {
             sh './gradlew docker snapshot'
           }
