@@ -18,7 +18,7 @@ pipeline {
     stage('build') {
       parallel {
         stage('build-dev') {
-          when{
+          when {
             branch 'develop'
           }
           steps {
@@ -29,8 +29,8 @@ pipeline {
         }
 
         stage('build-prod') {
-          when{
-                    branch 'master'
+          when {
+            branch 'master'
           }
           steps {
             sh '''./gradlew build snapshot
@@ -45,7 +45,7 @@ pipeline {
     stage('deployment') {
       parallel {
         stage('deploy-dev') {
-          when{
+          when {
             branch 'develop'
           }
           steps {
@@ -54,7 +54,7 @@ pipeline {
         }
 
         stage('deploy-prod') {
-          when{
+          when {
             branch 'master'
           }
           steps {
@@ -62,6 +62,12 @@ pipeline {
           }
         }
 
+      }
+    }
+
+    stage('cleaning') {
+      steps {
+        sh 'docker rmi $(docker images -f "dangling=true" -q)'
       }
     }
 
