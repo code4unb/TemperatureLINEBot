@@ -4,6 +4,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.experimental.aot' version '0.10.0-SNAPSHOT'
 	id "nebula.release" version "15.3.1"
+	id "com.palantir.docker" version "0.26.0"
 }
 
 group = 'com.code4unb'
@@ -38,6 +39,13 @@ test {
 bootBuildImage {
 	builder = 'paketobuildpacks/builder:tiny'
 	environment = ['BP_NATIVE_IMAGE': 'true']
+}
+
+docker{
+	name "${project.group}/${project.name.toLowerCase()}"
+
+	files bootJar.archiveFile.get()
+	buildArgs(['JAR_FILE': "${bootJar.getArchiveFileName().get()}"])
 }
 
 springBoot {
