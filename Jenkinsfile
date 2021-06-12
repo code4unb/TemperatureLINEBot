@@ -67,7 +67,7 @@ pipeline {
 
     stage('cleaning') {
       steps {
-        sh 'docker rmi $(docker images -f "dangling=true" -q)'
+        sh 'docker image prune -f'
       }
     }
 
