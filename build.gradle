@@ -43,7 +43,7 @@ bootBuildImage {
 
 docker{
 	name project.getProperties().getOrDefault("imageName",project.name.toLowerCase()).toString()
-	if(System.getenv("KEYSTORE_FILE").isEmpty()||System.getenv("KEYSTORE_PASSWORD").isEmpty()){
+	if(System.getenv("KEYSTORE_FILE")==null||System.getenv("KEYSTORE_PASSWORD")==null){
 		throw new GradleException("環境変数 KEYSTORE_FILE,KEYSTORE_PASSWORDを設定してください。")
 	}
 	files bootJar.archiveFile.get()
