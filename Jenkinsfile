@@ -53,9 +53,9 @@ pipeline {
             CONTAINER_NAME = 'LineBot-dev'
           }
           steps {
-              withCredentials([string(credentialsId: 'LINE_BOT_CHANNEL_TOKEN_DEV', variable: 'LINE_BOT_CHANNEL_TOKEN'), string(credentialsId: 'LINE_BOT_CHANNEL_SECRET_DEV', variable: 'LINE_BOT_CHANNEL_SECRET'), certificate(aliasVariable: 'SSL_KEYSTORE_ALIAS', credentialsId: '0ec97001-442c-4c99-888f-bde801c2d3c1', keystoreVariable: 'SSL_KEYSTORE_PATH', passwordVariable: 'SSL_KEYSTORE_PASSWORD')]) {
+              withCredentials([string(credentialsId: 'LINE_BOT_CHANNEL_TOKEN_DEV', variable: 'LINE_BOT_CHANNEL_TOKEN'), string(credentialsId: 'LINE_BOT_CHANNEL_SECRET_DEV', variable: 'LINE_BOT_CHANNEL_SECRET'),string(credentialsId: 'SSL_KEYSTORE_PASSWORD', variable: 'SSL_KEYSTORE_PASSWORD'),file(credentialsId: 'SSL_KEYSTORE_FILE', variable: 'SSL_KEYSTORE_FILE') ]) {
                 writeFile(file:"key.p12",text:readFile(text:$SSL_KEYSTORE_PATH))
-                withEnv(['KEYSTORE_PASSWORD=$SSL_KEYSTORE_PASSWORD']) {
+                withEnv(['KEYSTORE_FILE=$KEYSTORE_FILE','KEYSTORE_PASSWORD=$SSL_KEYSTORE_PASSWORD']) {
                     sh './gradlew docker -PimageName=$IMAGE_NAME'
                     sh 'rm key.p12'
                     sh 'docker stop $CONTAINER_NAME || true'
