@@ -54,7 +54,7 @@ pipeline {
           steps {
               withCredentials([string(credentialsId: 'LINE_BOT_CHANNEL_TOKEN_DEV', variable: 'LINE_BOT_CHANNEL_TOKEN'), string(credentialsId: 'LINE_BOT_CHANNEL_SECRET_DEV', variable: 'LINE_BOT_CHANNEL_SECRET'),string(credentialsId: 'SSL_KEYSTORE_PASSWORD', variable: 'SSL_KEYSTORE_PASSWORD'),file(credentialsId: 'SSL_KEYSTORE_FILE', variable: 'SSL_KEYSTORE_FILE') ]) {
                 script{
-                  writeFile(file:"key.p12",text:readFile(file:SSL_KEYSTORE_FILE))
+                  writeFile(file:"key.p12",text:readFile(file:SSL_KEYSTORE_FILE,text:'UTF-8'))
                 }
                 withEnv(['KEYSTORE_PASSWORD=$SSL_KEYSTORE_PASSWORD']) {
                     sh './gradlew docker -PimageName=$IMAGE_NAME'
