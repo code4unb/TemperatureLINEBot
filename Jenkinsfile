@@ -50,12 +50,14 @@ pipeline {
           }
           steps {
               withCredentials([string(credentialsId: 'LINE_BOT_CHANNEL_TOKEN_DEV', variable: 'LINE_BOT_CHANNEL_TOKEN'), string(credentialsId: 'LINE_BOT_CHANNEL_SECRET_DEV', variable: 'LINE_BOT_CHANNEL_SECRET'), certificate(aliasVariable: 'SSL_KEYSTORE_ALIAS', credentialsId: '0ec97001-442c-4c99-888f-bde801c2d3c1', keystoreVariable: 'SSL_KEYSTORE_PATH', passwordVariable: 'SSL_KEYSTORE_PASSWORD')]) {
-                IMAGE_NAME = "code4unb/temperaturelinebot-dev"
-                CONTAINER_NAME = 'LineBot-dev'
-                sh './gradlew docker -PimageName=${IMAGE_NAME}'
-                sh 'docker stop ${CONTAINER_NAME} || true'
-                sh 'docker rm ${CONTAINER_NAME} || true'
-                sh 'docker run -d -name ${CONTAINER_NAME} -p 443:8080 -e LINE_BOT_CHANNEL_SECRET=${LINE_BOT_CHANNEL_SECRET_DEV} -e LINE_BOT_CHANNEL_TOKEN=${LINE_BOT_CHANNEL_TOKEN_DEV} -e SSL_KEYSTORE_PATH=${SSL_KEYSTORE_PATH} -e SSL_KEYSTORE_PASSWORD=${SSL_KEYSTORE_PASSWORD} -e SSL_KEYSTORE_ALIAS=${SSL_KEYSTORE_ALIAS} {$IMAGE_NAME}:latest'
+                environment{
+                  IMAGE_NAME = "code4unb/temperaturelinebot-dev"
+                  CONTAINER_NAME = 'LineBot-dev'
+                }
+                sh './gradlew docker -PimageName=$IMAGE_NAME'
+                sh 'docker stop $CONTAINER_NAME || true'
+                sh 'docker rm $CONTAINER_NAME || true'
+                sh 'docker run -d -name $CONTAINER_NAME -p 443:8080 -e LINE_BOT_CHANNEL_SECRET=$LINE_BOT_CHANNEL_SECRET_DEV -e LINE_BOT_CHANNEL_TOKEN=$LINE_BOT_CHANNEL_TOKEN_DEV -e SSL_KEYSTORE_PATH=$SSL_KEYSTORE_PATH -e SSL_KEYSTORE_PASSWORD=$SSL_KEYSTORE_PASSWORD -e SSL_KEYSTORE_ALIAS=$SSL_KEYSTORE_ALIAS $IMAGE_NAME:latest'
               }
           }
         }
