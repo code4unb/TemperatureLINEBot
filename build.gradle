@@ -43,7 +43,7 @@ bootBuildImage {
 
 docker{
 	name project.getProperties().getOrDefault("imageName",project.name.toLowerCase()).toString()
-	files bootJar.archiveFile.get()
+	files(bootJar.archiveFile.get(),"key.p12")
 	buildArgs(['JAR_FILE': "${bootJar.getArchiveFileName().get()}","KEYSTORE_FILE":"/${project.projectDir.toPath().toString()}/key.p12","KEYSTORE_PASSWORD":"${System.getenv("KEYSTORE_PASSWORD")}"])
 	noCache true
 }
