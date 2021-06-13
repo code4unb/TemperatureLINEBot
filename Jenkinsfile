@@ -11,7 +11,7 @@ pipeline {
 
     stage('test') {
       steps {
-        sh './gradlew test'
+        //sh './gradlew test'
       }
     }
 
@@ -22,8 +22,7 @@ pipeline {
             branch 'develop'
           }
           steps {
-            sh '''./gradlew build 
-'''
+            //sh '''./gradlew build '''
             archiveArtifacts 'build/libs/*.jar'
           }
         }
