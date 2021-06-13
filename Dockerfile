@@ -9,6 +9,6 @@ ENV SSL_KEYSTORE_PASSWORD ${KEYSTORE_PASSWORD}
 ENV SSL_KEYSTORE_PATH /cacerts
 COPY key.p12 key.p12
 COPY ${JAR_FILE} app.jar
-RUN keytool -importkeystore -srckeystore key.p12 -srcstoretype PKCS12 -srcstorepass ${KEYSTORE_PASSWORD} -alias cert -deststorepass changeit -destkeypass changeit -destkeystore cacerts
+RUN keytool -importkeystore -srckeystore key.p12 -srcstoretype PKCS12 -srcstorepass mukai216 -alias cert -deststorepass changeit -destkeypass changeit -destkeystore cacerts
 EXPOSE 8080
 ENTRYPOINT [ "sh", "-c", "java ${JAVA_OPTS} -jar /app.jar" ]
