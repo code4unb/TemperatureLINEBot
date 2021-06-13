@@ -11,7 +11,7 @@ pipeline {
 
     stage('test') {
       steps {
-        sh ' echo ./gradlew test || true'
+        sh './gradlew test'
       }
     }
 
@@ -19,7 +19,7 @@ pipeline {
       parallel {
         stage('build-dev') {
           when {
-            branch 'developa'
+            branch 'develop'
           }
           steps {
             sh '''./gradlew build '''
