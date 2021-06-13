@@ -48,12 +48,12 @@ pipeline {
           when {
             branch 'develop'
           }
+          environment{
+            IMAGE_NAME = "code4unb/temperaturelinebot-dev"
+            CONTAINER_NAME = 'LineBot-dev'
+          }
           steps {
               withCredentials([string(credentialsId: 'LINE_BOT_CHANNEL_TOKEN_DEV', variable: 'LINE_BOT_CHANNEL_TOKEN'), string(credentialsId: 'LINE_BOT_CHANNEL_SECRET_DEV', variable: 'LINE_BOT_CHANNEL_SECRET'), certificate(aliasVariable: 'SSL_KEYSTORE_ALIAS', credentialsId: '0ec97001-442c-4c99-888f-bde801c2d3c1', keystoreVariable: 'SSL_KEYSTORE_PATH', passwordVariable: 'SSL_KEYSTORE_PASSWORD')]) {
-                environment{
-                  IMAGE_NAME = "code4unb/temperaturelinebot-dev"
-                  CONTAINER_NAME = 'LineBot-dev'
-                }
                 sh './gradlew docker -PimageName=$IMAGE_NAME'
                 sh 'docker stop $CONTAINER_NAME || true'
                 sh 'docker rm $CONTAINER_NAME || true'
