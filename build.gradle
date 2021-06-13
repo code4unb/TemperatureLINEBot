@@ -42,11 +42,8 @@ bootBuildImage {
 }
 
 docker{
-	if(project.hasProperty("dev")){
-		name "code4unb/${project.name.toLowerCase()+"-dev"}"
-	}else{
-		name "code4unb/${project.name.toLowerCase()}"
-	}
+	name project.getProperties().getOrDefault("imageName",project.name.toLowerCase()).toString()
+
 	files bootJar.archiveFile.get()
 	buildArgs(['JAR_FILE': "${bootJar.getArchiveFileName().get()}"])
 	noCache true
