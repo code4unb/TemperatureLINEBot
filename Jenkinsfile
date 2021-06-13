@@ -11,7 +11,7 @@ pipeline {
 
     stage('test') {
       steps {
-        sh ' echo ./gradlew test' || true
+        sh ' echo ./gradlew test || true'
       }
     }
 
