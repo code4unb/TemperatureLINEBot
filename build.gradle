@@ -43,6 +43,7 @@ bootBuildImage {
 
 docker{
 	name project.getProperties().getOrDefault("imageName",project.name.toLowerCase()).toString()
+	files(bootJar.archiveFile.get())
 	buildArgs(['JAR_FILE': "${bootJar.getArchiveFileName().get()}"])
 	noCache true
 }
