@@ -60,7 +60,7 @@ pipeline {
                     sh 'rm key.p12'
                     sh 'docker stop $CONTAINER_NAME || true'
                     sh 'docker rm $CONTAINER_NAME || true'
-                    sh 'docker run -d --name $CONTAINER_NAME -p 443:8080 --volumes-from Jenkins -e LINE_BOT_CHANNEL_SECRET=$LINE_BOT_CHANNEL_SECRET -e LINE_BOT_CHANNEL_TOKEN=$LINE_BOT_CHANNEL_TOKEN -e SSL_KEYSTORE_PATH=$SSL_KEYSTORE_PATH -e SSL_KEYSTORE_PASSWORD=$SSL_KEYSTORE_PASSWORD -e SSL_KEYSTORE_ALIAS=$SSL_KEYSTORE_ALIAS $IMAGE_NAME:latest'
+                    sh 'docker run -d --name $CONTAINER_NAME -p 443:8080 -e LINE_BOT_CHANNEL_SECRET=$LINE_BOT_CHANNEL_SECRET -e LINE_BOT_CHANNEL_TOKEN=$LINE_BOT_CHANNEL_TOKEN -e SSL_KEYSTORE_PASSWORD=$SSL_KEYSTORE_PASSWORD $IMAGE_NAME:latest'
                 }
               }
           }
