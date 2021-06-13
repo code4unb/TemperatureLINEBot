@@ -54,8 +54,8 @@ pipeline {
           }
           steps {
               withCredentials([string(credentialsId: 'LINE_BOT_CHANNEL_TOKEN_DEV', variable: 'LINE_BOT_CHANNEL_TOKEN'), string(credentialsId: 'LINE_BOT_CHANNEL_SECRET_DEV', variable: 'LINE_BOT_CHANNEL_SECRET'),string(credentialsId: 'SSL_KEYSTORE_PASSWORD', variable: 'SSL_KEYSTORE_PASSWORD'),file(credentialsId: 'SSL_KEYSTORE_FILE', variable: 'SSL_KEYSTORE_FILE') ]) {
-                sh 'chmod 777 $KEYSTORE_FILE'
-                sh 'export KEYSTORE_FILE=$KEYSTORE_FILE'
+                sh 'chmod 777 $SSL_KEYSTORE_FILE'
+                sh 'export KEYSTORE_FILE=$SSL_KEYSTORE_FILE'
                 sh 'export KEYSTORE_PASSWORD=$SSL_KEYSTORE_PASSWORD'
                 sh './gradlew docker -PimageName=$IMAGE_NAME'
                 sh 'chmod 600 $KEYSTORE_FILE'
