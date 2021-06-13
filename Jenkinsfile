@@ -11,7 +11,7 @@ pipeline {
 
     stage('test') {
       steps {
-        //sh './gradlew test'
+        sh ' echo ./gradlew test' || true
       }
     }
 
@@ -19,10 +19,10 @@ pipeline {
       parallel {
         stage('build-dev') {
           when {
-            branch 'develop'
+            branch 'developa'
           }
           steps {
-            //sh '''./gradlew build '''
+            sh '''./gradlew build '''
             archiveArtifacts 'build/libs/*.jar'
           }
         }
