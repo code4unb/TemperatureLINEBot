@@ -1,0 +1,26 @@
+version: "3"
+services:
+  db:
+    image: postgres:latest
+    container_name: "PostgreSQL"
+    ports:
+      - "5432:5432"
+    volumes:
+      - "db-data:/var/lib/postgresql/data"
+    environment:
+      - POSTGRES_DB=LineBot_Data
+      - POSTGRES_PASSWORD
+  app:
+    build:
+      context: .
+      args:
+        JAR_FILE: ${JAR_FILE}
+    container_name: "${CONTAINER_NAME}"
+    ports:
+      - "443:8080"
+    depends_on:
+      - db
+volumes:
+  db-data:
+    driver: local
+
