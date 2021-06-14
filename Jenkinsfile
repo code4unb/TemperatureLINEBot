@@ -56,7 +56,7 @@ pipeline {
                   sh 'export LINE_BOT_CHANNEL_SECRET=$LINE_BOT_CHANNEL_SECRET'
                    sh 'export LINE_BOT_CHANNEL_TOKEN=$LINE_BOT_CHANNEL_TOKEN'
                     sh 'export CONTAINER_NAME=$CONTAINER_NAME'
-                  sh './gradlew composeUp'
+                  sh './gradlew composeUp --stacktrace'
               }
           }
         }
