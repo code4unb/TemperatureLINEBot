@@ -15,6 +15,7 @@ services:
       context: .
       args:
         JAR_FILE: ${JAR_FILE}
+    image: ${IMAGE_NAME}
     container_name: "${CONTAINER_NAME}"
     ports:
       - "443:8080"
