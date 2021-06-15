@@ -8,7 +8,7 @@ services:
     volumes:
       - "db-data:/var/lib/postgresql/data"
     environment:
-      - POSTGRES_DB=LineBot_Data
+      - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
   app:
     build:
@@ -24,6 +24,8 @@ services:
     environment:
       - LINE_BOT_CHANNEL_TOKEN=${LINE_BOT_CHANNEL_TOKEN}
       - LINE_BOT_CHANNEL_SECRET=${LINE_BOT_CHANNEL_SECRET}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
 volumes:
   db-data:
     driver: local

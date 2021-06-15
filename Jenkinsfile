@@ -50,6 +50,7 @@ pipeline {
           environment{
             IMAGE_NAME = "code4unb/temperaturelinebot-dev"
             CONTAINER_NAME = 'LineBot-dev'
+            POSTGRES_DB="LineBot_Data"
           }
           steps {
               withCredentials([string(credentialsId: 'LINE_BOT_CHANNEL_TOKEN_DEV', variable: 'LINE_BOT_CHANNEL_TOKEN'), string(credentialsId: 'LINE_BOT_CHANNEL_SECRET_DEV', variable: 'LINE_BOT_CHANNEL_SECRET'), string(credentialsId: 'POSTGRES_PASSWORD', variable: 'POSTGRES_PASSWORD')]) {
