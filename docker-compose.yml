@@ -9,7 +9,7 @@ services:
       - "db-data:/var/lib/postgresql/data"
     environment:
       - POSTGRES_DB=LineBot_Data
-      - POSTGRES_PASSWORD
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
   app:
     build:
       context: .
