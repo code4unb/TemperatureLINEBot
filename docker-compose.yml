@@ -20,6 +20,9 @@ services:
       - "443:8080"
     depends_on:
       - db
+    environment:
+      - LINE_BOT_CHANNEL_TOKEN=${LINE_BOT_CHANNEL_TOKEN}
+      - LINE_BOT_CHANNEL_SECRET=${LINE_BOT_CHANNEL_SECRET}
 volumes:
   db-data:
     driver: local
