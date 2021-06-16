@@ -11,7 +11,13 @@ services:
     environment:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    networks:
+      - front
 volumes:
   db-data:
     driver: local
+networks:
+  front:
+    external:
+      name: shared_default
 
