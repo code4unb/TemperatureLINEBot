@@ -10,9 +10,9 @@ pipeline {
     }
 
     stage('test') {
-    environment {
+      environment {
       SPRING_PROFILES_ACTIVE="dev"
-    }
+      }
       steps {
       sh 'echo disabled'
         //sh './gradlew test'
@@ -22,11 +22,11 @@ pipeline {
     stage('build') {
       parallel {
         stage('build-dev') {
-          when {
-            branch 'develop'
-          }
           environment {
             SPRING_PROFILES_ACTIVE=prod
+          }
+          when {
+            branch 'develop'
           }
           steps {
             sh '''./gradlew build '''
