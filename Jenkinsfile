@@ -14,7 +14,7 @@ pipeline {
       SPRING_PROFILES_ACTIVE="dev"
     }
       steps {
-      sh 'echo '
+      sh 'echo disabled'
         //sh './gradlew test'
       }
     }
