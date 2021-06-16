@@ -9,8 +9,6 @@ services:
     container_name: "${CONTAINER_NAME}-${PRODUCTION}"
     ports:
       - "443:8080"
-    depends_on:
-      - db
     environment:
       - LINE_BOT_CHANNEL_TOKEN=${LINE_BOT_CHANNEL_TOKEN}
       - LINE_BOT_CHANNEL_SECRET=${LINE_BOT_CHANNEL_SECRET}
