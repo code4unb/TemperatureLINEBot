@@ -44,6 +44,7 @@ bootBuildImage {
 }
 
 dockerCompose{
+	useComposeFiles = ['docker-compose-app.yml']
 	upAdditionalArgs = ['--build']
 	environment.put 'JAR_FILE',"${bootJar.getArchiveFileName().get()}"
 }
