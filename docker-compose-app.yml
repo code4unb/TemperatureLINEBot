@@ -19,7 +19,7 @@ services:
       - SPRING_PROFILES_ACTIVE=prod
     networks:
       - front
-  networks:
-    front:
-      external:
-        name: shared_default
+ networks:
+   front:
+     external:
+       name: shared_default
