@@ -27,6 +27,7 @@ services:
       - LINE_BOT_CHANNEL_SECRET=${LINE_BOT_CHANNEL_SECRET}
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - SPRING_PROFILES_ACTIVE=prod
 volumes:
   db-data:
     driver: local

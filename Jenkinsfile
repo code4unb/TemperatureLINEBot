@@ -10,6 +10,9 @@ pipeline {
     }
 
     stage('test') {
+    environment {
+      SPRING_PROFILES_ACTIVE="dev"
+    }
       steps {
         sh './gradlew test'
       }
@@ -47,7 +50,7 @@ pipeline {
           when {
             branch 'develop'
           }
-          environment{
+          environment {
             IMAGE_NAME = "code4unb/temperaturelinebot-dev"
             CONTAINER_NAME = 'LineBot-dev'
             POSTGRES_DB="LineBot_Data"
