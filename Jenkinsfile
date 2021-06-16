@@ -63,12 +63,12 @@ pipeline {
             PRODUCTION="dev"
           }
           steps {
-            sh 'docker-compose -f docker-compose-shared.yml up'
             withCredentials([string(credentialsId: 'LINE_BOT_CHANNEL_TOKEN_DEV', variable: 'LINE_BOT_CHANNEL_TOKEN'), string(credentialsId: 'LINE_BOT_CHANNEL_SECRET_DEV', variable: 'LINE_BOT_CHANNEL_SECRET'), string(credentialsId: 'POSTGRES_PASSWORD', variable: 'POSTGRES_PASSWORD')]) {
               sh 'export IMAGE_NAME=$IMAGE_NAME'
               sh 'export LINE_BOT_CHANNEL_SECRET=$LINE_BOT_CHANNEL_SECRET'
               sh 'export LINE_BOT_CHANNEL_TOKEN=$LINE_BOT_CHANNEL_TOKEN'
               sh 'export POSTGRES_PASSWORD=$POSTGRES_PASSWORD'
+              sh 'docker-compose -f docker-compose-shared.yml up'
               sh './gradlew composeUp'
             }
           }
@@ -82,12 +82,12 @@ pipeline {
             PRODUCTION="prod"
           }
           steps {
-            sh 'docker-compose -f docker-compose-shared.yml up'
             withCredentials([string(credentialsId: 'LINE_BOT_CHANNEL_TOKEN_PROD', variable: 'LINE_BOT_CHANNEL_TOKEN'), string(credentialsId: 'LINE_BOT_CHANNEL_SECRET_PROD', variable: 'LINE_BOT_CHANNEL_SECRET'), string(credentialsId: 'POSTGRES_PASSWORD', variable: 'POSTGRES_PASSWORD')]) {
               sh 'export IMAGE_NAME=$IMAGE_NAME'
               sh 'export LINE_BOT_CHANNEL_SECRET=$LINE_BOT_CHANNEL_SECRET'
               sh 'export LINE_BOT_CHANNEL_TOKEN=$LINE_BOT_CHANNEL_TOKEN'
               sh 'export POSTGRES_PASSWORD=$POSTGRES_PASSWORD'
+              sh 'docker-compose -f docker-compose-shared.yml up'
               sh './gradlew composeUp snapshot'
             }
           }
