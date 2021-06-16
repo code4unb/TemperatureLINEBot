@@ -23,7 +23,7 @@ pipeline {
       parallel {
         stage('build-dev') {
           environment {
-            SPRING_PROFILES_ACTIVE=prod
+            SPRING_PROFILES_ACTIVE="prod"
           }
           when {
             branch 'develop'
