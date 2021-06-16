@@ -12,30 +12,30 @@ import org.springframework.data.relational.core.mapping.Table;
 @Getter
 @EqualsAndHashCode(of = {"id"})
 public class UserDataEntity {
-    @Column("ID")
+    @Column("id")
     @Id
     @With
     private final String id;
 
     //Encrypt
-    @Column("LINE_ID")
+    @Column("line_id")
     private final String lineId;
 
-    @Column("GRADE")
+    @Column("grade")
     private final Grades grade;
 
-    @Column("CLASS")
+    @Column("class")
     private final int class_;
 
-    @Column("NUMBER")
+    @Column("number")
     private final int number;
 
     //Encrypt
-    @Column("FIRST_NAME")
+    @Column("first_name")
     private final String firstName;
 
     //Encrypt
-    @Column("LAST_NAME")
+    @Column("last_name")
     private final String lastName;
 
     @PersistenceConstructor
