@@ -25,6 +25,9 @@ pipeline {
           when {
             branch 'develop'
           }
+          environment {
+            SPRING_PROFILES_ACTIVE=prod
+          }
           steps {
             sh '''./gradlew build '''
             archiveArtifacts 'build/libs/*.jar'
