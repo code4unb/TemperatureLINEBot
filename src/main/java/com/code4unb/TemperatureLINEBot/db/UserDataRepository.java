@@ -7,6 +7,6 @@ import org.springframework.data.repository.query.Param;
 import java.util.Optional;
 
 public interface UserDataRepository extends CrudRepository<UserDataEntity,String> {
-    @Query("SELECT * FROM USER_DATA WHERE LINE_ID=:lineID")
+    @Query("SELECT * FROM user_data WHERE LINE_ID=:lineID")
     Optional<UserDataEntity> findByLineID(@Param("lineID") String lineID);
 }

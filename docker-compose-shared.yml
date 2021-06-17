@@ -1,0 +1,23 @@
+version: "3"
+services:
+  db:
+    image: postgres:latest
+    container_name: "PostgreSQL"
+    ports:
+      - "5432:5432"
+    volumes:
+      - "db-data:/var/lib/postgresql/data"
+      - ./postgres/initdb:/docker-entrypoint-initdb.d
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    networks:
+      - front
+volumes:
+  db-data:
+    driver: local
+networks:
+  front:
+    external:
+      name: shared_default
+

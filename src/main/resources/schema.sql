@@ -1,4 +1,4 @@
-create table if not exists USER_DATA
+create table if not exists user_data
 (
     id serial not null
     ,line_id text not null
