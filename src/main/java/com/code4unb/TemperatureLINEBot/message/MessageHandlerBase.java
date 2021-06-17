@@ -1,7 +1,10 @@
 package com.code4unb.TemperatureLINEBot.message;
 
+import com.code4unb.TemperatureLINEBot.model.ReceivedMessage;
 import com.linecorp.bot.model.message.Message;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Arrays;
 
@@ -11,6 +14,10 @@ public abstract class MessageHandlerBase{
 
     @Getter
     private final String[] Aliases;
+
+    @Getter
+    @Setter(AccessLevel.PROTECTED)
+    private boolean hidden;
 
     public MessageHandlerBase(String keyPhrase,String... aliases){
         KeyPhrase = keyPhrase;

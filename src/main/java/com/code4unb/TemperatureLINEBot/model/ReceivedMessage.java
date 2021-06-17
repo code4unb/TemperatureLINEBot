@@ -1,8 +1,9 @@
-package com.code4unb.TemperatureLINEBot.message;
+package com.code4unb.TemperatureLINEBot.model;
 
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
 import com.linecorp.bot.model.event.source.Source;
+import lombok.ToString;
 import lombok.Value;
 import org.springframework.lang.Nullable;
 
@@ -10,6 +11,7 @@ import java.time.Instant;
 import java.util.Arrays;
 
 @Value
+@ToString
 public class ReceivedMessage {
     Instant TimeStamp;
 

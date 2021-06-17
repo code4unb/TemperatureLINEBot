@@ -2,7 +2,7 @@ package com.code4unb.TemperatureLINEBot.message.handler;
 
 import com.code4unb.TemperatureLINEBot.message.MessageHandler;
 import com.code4unb.TemperatureLINEBot.message.MessageHandlerBase;
-import com.code4unb.TemperatureLINEBot.message.ReceivedMessage;
+import com.code4unb.TemperatureLINEBot.model.ReceivedMessage;
 import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.model.message.TextMessage;
 import org.springframework.beans.factory.annotation.Autowired;

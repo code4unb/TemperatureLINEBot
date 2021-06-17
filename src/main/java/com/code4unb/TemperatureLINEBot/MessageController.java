@@ -1,8 +1,8 @@
 package com.code4unb.TemperatureLINEBot;
 
 import com.code4unb.TemperatureLINEBot.message.MessageHandlerBase;
-import com.code4unb.TemperatureLINEBot.message.ReceivedMessage;
 import com.code4unb.TemperatureLINEBot.message.SessionMessageHandler;
+import com.code4unb.TemperatureLINEBot.model.ReceivedMessage;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
 import com.linecorp.bot.model.message.Message;

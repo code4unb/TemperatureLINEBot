@@ -1,5 +1,6 @@
 package com.code4unb.TemperatureLINEBot.message;
 
+import com.code4unb.TemperatureLINEBot.model.ReceivedMessage;
 import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.model.message.TextMessage;
 import lombok.AccessLevel;
