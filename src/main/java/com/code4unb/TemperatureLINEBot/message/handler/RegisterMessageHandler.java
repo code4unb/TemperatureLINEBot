@@ -3,7 +3,9 @@ package com.code4unb.TemperatureLINEBot.message.handler;
 import com.code4unb.TemperatureLINEBot.UserData;
 import com.code4unb.TemperatureLINEBot.db.UserDataEntity;
 import com.code4unb.TemperatureLINEBot.db.UserDataRepository;
-import com.code4unb.TemperatureLINEBot.message.SessionMessageHandler;
+import com.code4unb.TemperatureLINEBot.message.Flow;
+import com.code4unb.TemperatureLINEBot.message.FlowMessageHandler;
+import com.code4unb.TemperatureLINEBot.message.FlowResult;
 import com.code4unb.TemperatureLINEBot.model.ReceivedMessage;
 import com.code4unb.TemperatureLINEBot.util.FlexJson;
 import com.linecorp.bot.model.message.FlexMessage;
@@ -12,10 +14,12 @@ import com.linecorp.bot.model.message.TextMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @Component
-public class RegisterMessageHandler extends SessionMessageHandler {
+public class RegisterMessageHandler extends FlowMessageHandler {
     @Autowired
     private UserDataRepository userDataRepository;
 
@@ -24,26 +28,45 @@ public class RegisterMessageHandler extends SessionMessageHandler {
     }
 
     @Override
-    protected Message handleActivateMessage(ReceivedMessage message) {
-        return new FlexMessage("register",FlexJson.LoadFlexContainer("register"));
+    protected List<Flow> initFlows() {
+        return Collections.singletonList(
+                new Flow(){
+
+                    @Override
+                    public List<Message> postHandle() {
+                        return null;
+                    }
+
+                    @Override
+                    public FlowResult handle(ReceivedMessage message) {
+                        UserData userData;
+                        if((userData =  tryParse(message.getSource().getUserId(),message.getPhrases())) !=null){
+                            Optional<UserDataEntity> found = userDataRepository.findByLineID(userData.getLineID());
+                            if(found.isPresent()){
+                                userDataRepository.save(new UserDataEntity(found.get().getId(),userData));
+                            }else{
+                                userDataRepository.save(new UserDataEntity(userData));
+                            }
+                            close();
+                            return FlowResult.builder()
+                                    .result(Collections.singletonList(TextMessage.builder().text(userData.toString()+" 登録しました。 間違いがある場合は '再登録' と送信してください。").build()))
+                                    .succeed(true)
+                                    .build();
+                        }else{
+                            return FlowResult.builder()
+                                    .result(Collections.singletonList(TextMessage.builder().text("入力に不備があります。再度入力してください。").build()))
+                                    .succeed(false)
+                                    .build();
+                        }
+                    }
+                });
     }
 
     @Override
-    public Message handleSessionMessage(ReceivedMessage message) {
-        UserData userData;
-        if((userData =  tryParse(message.getSource().getUserId(),message.getPhrases())) !=null){
-            Optional<UserDataEntity> found = userDataRepository.findByLineID(userData.getLineID());
-            if(found.isPresent()){
-                userDataRepository.save(new UserDataEntity(found.get().getId(),userData));
-            }else{
-                userDataRepository.save(new UserDataEntity(userData));
-            }
-            close();
-            return TextMessage.builder().text(userData.toString()+" 登録しました。 間違いがある場合は '再登録' と送信してください。").build();
-        }else{
-            return TextMessage.builder().text("入力に不備があります。再度入力してください。").build();
-        }
+    protected List<Message> handleActivateMessage(ReceivedMessage message) {
+        return Collections.singletonList(new FlexMessage("register",FlexJson.LoadFlexContainer("register")));
     }
+
     private UserData tryParse(String lineID,String[] args){
         if(args.length <5) return null;
         try{

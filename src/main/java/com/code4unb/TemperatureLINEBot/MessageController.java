@@ -1,7 +1,7 @@
 package com.code4unb.TemperatureLINEBot;
 
 import com.code4unb.TemperatureLINEBot.message.MessageHandlerBase;
-import com.code4unb.TemperatureLINEBot.message.SessionMessageHandler;
+import com.code4unb.TemperatureLINEBot.message.FlowMessageHandler;
 import com.code4unb.TemperatureLINEBot.model.ReceivedMessage;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
@@ -12,6 +12,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 @Slf4j
@@ -22,11 +25,11 @@ public class MessageController {
     Set<MessageHandlerBase> Handlers;
 
     @EventMapping
-    public Message handleTextMessageEvent(MessageEvent<TextMessageContent> event){
+    public List<Message> handleTextMessageEvent(MessageEvent<TextMessageContent> event){
         ReceivedMessage message = ReceivedMessage.Build(event);
         log.info("Message received :"+message.getKeyPhrase());
-        if(SessionMessageHandler.getCurrentSession() != null && SessionMessageHandler.getCurrentSession().isOpen()){
-            return SessionMessageHandler.getCurrentSession().handleMessage(message);
+        if(FlowMessageHandler.getCurrentSession() != null && FlowMessageHandler.getCurrentSession().shouldHandle()){
+            return FlowMessageHandler.getCurrentSession().handleMessage(message);
         }
         for(MessageHandlerBase handler: Handlers){
             if(handler.shouldHandle(message.getKeyPhrase())){

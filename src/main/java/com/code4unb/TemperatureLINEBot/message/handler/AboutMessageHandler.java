@@ -10,6 +10,8 @@ import org.springframework.boot.info.BuildProperties;
 import org.springframework.stereotype.Component;
 
 import java.time.ZoneId;
+import java.util.Collections;
+import java.util.List;
 
 @Component
 public class AboutMessageHandler extends MessageHandler {
@@ -21,9 +23,9 @@ public class AboutMessageHandler extends MessageHandler {
     }
 
     @Override
-    public Message handleMessage(ReceivedMessage message) {
+    public List<Message> handleMessage(ReceivedMessage message) {
         String json = FlexJson.LoadMessageJson("about");
         json = String.format(json, buildProperties.getName(), buildProperties.getVersion(), buildProperties.getTime().atZone(ZoneId.systemDefault()).toString());
-        return new FlexMessage("version:"+buildProperties.getVersion(),FlexJson.CreateFlexContainer(json));
+        return Collections.singletonList(new FlexMessage("version:"+buildProperties.getVersion(),FlexJson.CreateFlexContainer(json)));
     }
 }

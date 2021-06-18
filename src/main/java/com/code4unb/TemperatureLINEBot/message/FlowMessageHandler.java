@@ -8,8 +8,13 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.Instant;
+import java.util.Collections;
+import java.util.List;
 
-public abstract class SessionMessageHandler extends MessageHandlerBase{
+public abstract class FlowMessageHandler extends MessageHandlerBase{
+
+    protected MessageFlow flow;
+
     @Getter
     @Setter(AccessLevel.PROTECTED)
     private long expirationSecond = 600;
@@ -24,35 +29,46 @@ public abstract class SessionMessageHandler extends MessageHandlerBase{
     private boolean open;
 
     @Getter
-    private static SessionMessageHandler CurrentSession;
+    private static FlowMessageHandler CurrentSession;
 
-    public SessionMessageHandler(String keyPhrase, String... aliases) {
+    public FlowMessageHandler(String keyPhrase, String... aliases) {
         super(keyPhrase, aliases);
+        initFlows();
     }
 
-    protected abstract Message handleActivateMessage(ReceivedMessage message);
+    protected abstract List<Flow> initFlows();
 
-    protected abstract Message handleSessionMessage(ReceivedMessage message);
+    protected abstract List<Message> handleActivateMessage(ReceivedMessage message);
+
+    public boolean shouldHandle(){
+        if(flow.isCompleted() || isOpen()){
+            close();
+            return false;
+        }else{
+            return true;
+        }
+    }
 
     @Override
-    public final Message handleMessage(ReceivedMessage message){
+    public final List<Message> handleMessage(ReceivedMessage message){
         if(isOpen()){
             if(isExpired()){
                 close();
-                return TextMessage.builder()
+                return Collections.singletonList(TextMessage.builder()
                         .text("有効期限が切れています。最初からやり直してください。")
-                        .build();
+                        .build());
             }
             refresh();
             if(message.getKeyPhrase().equalsIgnoreCase("終了")){
                 close();
-                return TextMessage.builder()
+                return Collections.singletonList(TextMessage.builder()
                         .text("セッションを終了します。")
-                        .build();
+                        .build());
             }
-            return handleSessionMessage(message);
+
+            return flow.handleNextFlow(message);
         }else{
-            Open();
+            open();
             return  handleActivateMessage(message);
         }
     }
@@ -61,11 +77,11 @@ public abstract class SessionMessageHandler extends MessageHandlerBase{
         return refreshedDate.plusSeconds(expirationSecond).isBefore(Instant.now());
     }
 
-    protected final void Open(){
+    protected final void open(){
         createdDate = Instant.now();
         refreshedDate = createdDate;
         open = true;
-        SessionMessageHandler.CurrentSession = this;
+        FlowMessageHandler.CurrentSession = this;
     }
 
     protected final void refresh(){

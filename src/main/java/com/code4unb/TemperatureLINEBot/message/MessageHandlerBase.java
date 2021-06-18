@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Arrays;
+import java.util.List;
 
 public abstract class MessageHandlerBase{
     @Getter
@@ -29,5 +30,5 @@ public abstract class MessageHandlerBase{
         return Arrays.stream(Aliases).anyMatch(x->x.equalsIgnoreCase(phrase));
     }
 
-    public abstract Message handleMessage(ReceivedMessage message);
+    public abstract List<Message> handleMessage(ReceivedMessage message);
 }

@@ -8,6 +8,8 @@ import com.linecorp.bot.model.message.TextMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 @Component
@@ -20,8 +22,8 @@ public class CommandMessageHandler extends MessageHandler {
     }
 
     @Override
-    public Message handleMessage(ReceivedMessage message) {
+    public List<Message> handleMessage(ReceivedMessage message) {
         String text = String.join(",",Handlers.stream().map(x->x.getKeyPhrase()).toArray(String[]::new));
-        return TextMessage.builder().text(text).build();
+        return Collections.singletonList(TextMessage.builder().text(text).build());
     }
 }
