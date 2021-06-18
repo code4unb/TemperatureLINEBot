@@ -3,7 +3,7 @@ package com.code4unb.TemperatureLINEBot.message.handler;
 import com.code4unb.TemperatureLINEBot.UserData;
 import com.code4unb.TemperatureLINEBot.db.UserDataEntity;
 import com.code4unb.TemperatureLINEBot.db.UserDataRepository;
-import com.code4unb.TemperatureLINEBot.message.MessageHandler;
+import com.code4unb.TemperatureLINEBot.message.SingleMessageHandler;
 import com.code4unb.TemperatureLINEBot.model.ReceivedMessage;
 import com.code4unb.TemperatureLINEBot.util.FlexJson;
 import com.linecorp.bot.model.message.FlexMessage;
@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-public class RegisteredDataMessageHandler extends MessageHandler {
+public class RegisteredDataMessageHandler extends SingleMessageHandler {
     @Autowired
     UserDataRepository userDataRepository;
 

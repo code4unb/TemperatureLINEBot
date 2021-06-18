@@ -33,8 +33,8 @@ public class RegisterMessageHandler extends FlowMessageHandler {
                 new Flow(){
 
                     @Override
-                    public List<Message> postHandle() {
-                        return null;
+                    public Optional<List<Message>> postHandle() {
+                        return Optional.empty();
                     }
 
                     @Override
@@ -49,12 +49,12 @@ public class RegisterMessageHandler extends FlowMessageHandler {
                             }
                             close();
                             return FlowResult.builder()
-                                    .result(Collections.singletonList(TextMessage.builder().text(userData.toString()+" 登録しました。 間違いがある場合は '再登録' と送信してください。").build()))
+                                    .result(Optional.of(Collections.singletonList(TextMessage.builder().text(userData.toString()+" 登録しました。 間違いがある場合は '再登録' と送信してください。").build())))
                                     .succeed(true)
                                     .build();
                         }else{
                             return FlowResult.builder()
-                                    .result(Collections.singletonList(TextMessage.builder().text("入力に不備があります。再度入力してください。").build()))
+                                    .result(Optional.of(Collections.singletonList(TextMessage.builder().text("入力に不備があります。再度入力してください。").build())))
                                     .succeed(false)
                                     .build();
                         }

@@ -1,6 +1,6 @@
 package com.code4unb.TemperatureLINEBot.message.handler;
 
-import com.code4unb.TemperatureLINEBot.message.MessageHandler;
+import com.code4unb.TemperatureLINEBot.message.SingleMessageHandler;
 import com.code4unb.TemperatureLINEBot.model.ReceivedMessage;
 import com.code4unb.TemperatureLINEBot.util.FlexJson;
 import com.linecorp.bot.model.message.FlexMessage;
@@ -14,7 +14,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Component
-public class AboutMessageHandler extends MessageHandler {
+public class AboutMessageHandler extends SingleMessageHandler {
     @Autowired
     BuildProperties buildProperties;
 
