@@ -1,7 +1,7 @@
 package com.code4unb.TemperatureLINEBot.message.handler;
 
-import com.code4unb.TemperatureLINEBot.message.MessageHandler;
 import com.code4unb.TemperatureLINEBot.message.MessageHandlerBase;
+import com.code4unb.TemperatureLINEBot.message.SingleMessageHandler;
 import com.code4unb.TemperatureLINEBot.model.ReceivedMessage;
 import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.model.message.TextMessage;
@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 @Component
-public class CommandMessageHandler extends MessageHandler {
+public class CommandMessageHandler extends SingleMessageHandler {
     @Autowired(required = false)
     Set<MessageHandlerBase> Handlers;
 

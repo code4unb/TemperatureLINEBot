@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -33,7 +34,7 @@ public abstract class FlowMessageHandler extends MessageHandlerBase{
 
     public FlowMessageHandler(String keyPhrase, String... aliases) {
         super(keyPhrase, aliases);
-        initFlows();
+        flow = new MessageFlow(initFlows());
     }
 
     protected abstract List<Flow> initFlows();
@@ -41,7 +42,7 @@ public abstract class FlowMessageHandler extends MessageHandlerBase{
     protected abstract List<Message> handleActivateMessage(ReceivedMessage message);
 
     public boolean shouldHandle(){
-        if(flow.isCompleted() || isOpen()){
+        if(flow.isCompleted() || !isOpen()){
             close();
             return false;
         }else{
@@ -68,8 +69,16 @@ public abstract class FlowMessageHandler extends MessageHandlerBase{
 
             return flow.handleNextFlow(message);
         }else{
+            flow.init();
             open();
-            return  handleActivateMessage(message);
+            List<Message> result = new ArrayList<Message>();
+            List<Message> handleResult = handleActivateMessage(message);
+            if(handleResult!=null){
+                result.addAll(handleResult);
+            }
+            if(isOpen()) flow.getCurrentFlow().postHandle().ifPresent(y->result.addAll(y));
+            if(result.size()==0)return null;
+            return result;
         }
     }
 

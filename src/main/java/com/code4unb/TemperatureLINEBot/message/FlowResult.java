@@ -6,12 +6,13 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.util.List;
+import java.util.Optional;
 
 @Getter
 @Builder
 @AllArgsConstructor
 public class FlowResult {
-    private List<Message> result;
+    private Optional<List<Message>> result;
 
     private boolean succeed;
 }

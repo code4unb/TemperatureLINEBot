@@ -3,12 +3,14 @@ package com.code4unb.TemperatureLINEBot.message;
 import com.code4unb.TemperatureLINEBot.model.ReceivedMessage;
 import com.linecorp.bot.model.message.Message;
 import lombok.Getter;
+import lombok.NonNull;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class MessageFlow {
-    private LinkedList<Flow> flows;
+    private final List<Flow> flows;
 
     @Getter
     private int currentIndex;
@@ -29,11 +31,23 @@ public class MessageFlow {
         return currentIndex+1>flows.size();
     }
 
-    private Flow getNextFlow(){
-        if(currentIndex+1<=flows.size()){
-            return flows.get(currentIndex+1);
+    public MessageFlow(@NonNull List<Flow> flows){
+        this.flows = flows;
+        init();
+    }
+
+    public void init(){
+        currentIndex=0;
+    }
+
+    public Flow getCurrentFlow(){
+        return flows.get(currentIndex);
+    }
+    public Optional<Flow> getNextFlow(){
+        if(currentIndex+1<flows.size()){
+            return Optional.of(flows.get(currentIndex+1));
         }else{
-            return null;
+            return Optional.empty();
         }
     }
 
@@ -41,13 +55,16 @@ public class MessageFlow {
         if(isCompleted()) return null;
         FlowResult result = flows.get(currentIndex).handle(message);
         if(result.isSucceed()){
+            List<Message> resultMessage = new ArrayList<Message>();
+
+            result.getResult().ifPresent(x->resultMessage.addAll(x));
+            getNextFlow().ifPresent(x -> x.postHandle().ifPresent(y->resultMessage.addAll(y)));
+
             currentIndex++;
 
-            List<Message> resultMessage = result.getResult();
-            resultMessage.addAll(getNextFlow().postHandle());
             return resultMessage;
         }else{
-            return result.getResult();
+            return result.getResult().get();
         }
     }
 
