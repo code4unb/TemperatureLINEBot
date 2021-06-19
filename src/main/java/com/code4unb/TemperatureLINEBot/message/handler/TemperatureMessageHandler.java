@@ -43,7 +43,8 @@ public class TemperatureMessageHandler extends FlowMessageHandler {
 
                     @Override
                     public FlowResult handle(ReceivedMessage message) {
-                        if(parseFloat(message.getKeyPhrase()).isPresent()){
+                        Optional<Float> parsed = parseFloat(message.getKeyPhrase());
+                        if(parsed.isPresent() && (33f <= parsed.get() && parsed.get() < 43f)){
                             return new FlowResult(Optional.empty(),true);
                         }else{
                             return new FlowResult(Optional.of(Collections.singletonList(TextMessage.builder().text("不正な入力値 " + message.getKeyPhrase() + " です。体温は33℃から43℃の範囲内で入力してください。").build())),false);
