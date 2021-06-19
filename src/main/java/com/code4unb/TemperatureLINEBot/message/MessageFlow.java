@@ -55,10 +55,10 @@ public class MessageFlow {
         if(isCompleted()) return null;
         FlowResult result = flows.get(currentIndex).handle(message);
         if(result.isSucceed()){
-            List<Message> resultMessage = new ArrayList<Message>();
+            List<Message> resultMessage = new ArrayList<>();
 
-            result.getResult().ifPresent(x->resultMessage.addAll(x));
-            getNextFlow().ifPresent(x -> x.postHandle().ifPresent(y->resultMessage.addAll(y)));
+            result.getResult().ifPresent(resultMessage::addAll);
+            getNextFlow().flatMap(Flow::postHandle).ifPresent(resultMessage::addAll);
 
             currentIndex++;
 

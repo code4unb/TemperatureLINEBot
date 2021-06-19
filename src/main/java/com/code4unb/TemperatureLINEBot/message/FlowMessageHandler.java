@@ -3,101 +3,78 @@ package com.code4unb.TemperatureLINEBot.message;
 import com.code4unb.TemperatureLINEBot.model.ReceivedMessage;
 import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.model.message.TextMessage;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public abstract class FlowMessageHandler extends MessageHandlerBase{
 
-    protected MessageFlow flow;
+    protected final List<Flow> flow;
 
-    @Getter
-    @Setter(AccessLevel.PROTECTED)
-    private long expirationSecond = 600;
+    @Autowired
+    private ApplicationContext applicationContext;
 
-    @Getter
-    private Instant createdDate;
+    @Autowired
+    protected SessionManager sessionManager;
 
-    @Getter
-    private Instant refreshedDate;
+    public static final String ID_MESSAGE_FLOW = "message_flow";
 
-    @Getter
-    private boolean open;
-
-    @Getter
-    private static FlowMessageHandler CurrentSession;
+    public static final String ID_HANDLER_TYPE = "handler_type";
 
     public FlowMessageHandler(String keyPhrase, String... aliases) {
         super(keyPhrase, aliases);
-        flow = new MessageFlow(initFlows());
+        flow = initFlows();
     }
 
     protected abstract List<Flow> initFlows();
 
     protected abstract List<Message> handleActivateMessage(ReceivedMessage message);
 
-    public boolean shouldHandle(){
-        if(flow.isCompleted() || !isOpen()){
-            close();
-            return false;
-        }else{
-            return true;
-        }
-    }
-
     @Override
     public final List<Message> handleMessage(ReceivedMessage message){
-        if(isOpen()){
-            if(isExpired()){
-                close();
-                return Collections.singletonList(TextMessage.builder()
-                        .text("有効期限が切れています。最初からやり直してください。")
-                        .build());
-            }
-            refresh();
-            if(message.getKeyPhrase().equalsIgnoreCase("終了")){
-                close();
-                return Collections.singletonList(TextMessage.builder()
-                        .text("セッションを終了します。")
-                        .build());
-            }
+        String currentUserId = message.getSource().getUserId();
 
-            return flow.handleNextFlow(message);
-        }else{
-            flow.init();
-            open();
-            List<Message> result = new ArrayList<Message>();
+        if(!sessionManager.hasSession(currentUserId)) {
+            Session newSession = new Session();
+            newSession.addData(ID_MESSAGE_FLOW, new MessageFlow(flow));
+            newSession.addData(ID_HANDLER_TYPE,applicationContext.getBeanNamesForType(this.getClass())[0]);
+            sessionManager.addSession(currentUserId, newSession);
+
+            List<Message> result = new ArrayList<>();
             List<Message> handleResult = handleActivateMessage(message);
             if(handleResult!=null){
                 result.addAll(handleResult);
             }
-            if(isOpen()) flow.getCurrentFlow().postHandle().ifPresent(y->result.addAll(y));
+            ((MessageFlow)sessionManager.findSession(currentUserId).get().getData(ID_MESSAGE_FLOW)) .getCurrentFlow().postHandle().ifPresent(result::addAll);
             if(result.size()==0)return null;
             return result;
         }
-    }
 
-    public boolean isExpired(){
-        return refreshedDate.plusSeconds(expirationSecond).isBefore(Instant.now());
-    }
+        Optional<Session> session = sessionManager.findSession(currentUserId);
 
-    protected final void open(){
-        createdDate = Instant.now();
-        refreshedDate = createdDate;
-        open = true;
-        FlowMessageHandler.CurrentSession = this;
-    }
+        if(!sessionManager.hasActiveSession(currentUserId)) {
+            sessionManager.removeSession(currentUserId);
+            return Collections.singletonList(TextMessage.builder()
+                    .text("有効期限が切れています。最初からやり直してください。")
+                    .build());
+        }else{
+            session.get().refresh();
 
-    protected final void refresh(){
-        refreshedDate = Instant.now();
-    }
-
-    protected void close(){
-        open = false;
+            if(message.getKeyPhrase().equalsIgnoreCase("終了")){
+                sessionManager.removeSession(currentUserId);
+                return Collections.singletonList(TextMessage.builder()
+                        .text("セッションを終了します。")
+                        .build());
+            }
+            List<Message> result = ((MessageFlow)session.get().getData(ID_MESSAGE_FLOW)).handleNextFlow(message);
+            if(((MessageFlow)session.get().getData(ID_MESSAGE_FLOW)).isCompleted()) {
+                sessionManager.removeSession(currentUserId);
+            }
+            return result;
+        }
     }
 }

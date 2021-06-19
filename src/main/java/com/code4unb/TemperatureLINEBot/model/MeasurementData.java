@@ -5,15 +5,16 @@ import lombok.Getter;
 
 import java.time.LocalDate;
 import java.util.Calendar;
+import java.util.Optional;
 
 @Builder
 @Getter
 public class MeasurementData {
-    private String temperature;
+    private final String temperature;
 
-    private LocalDate date;
+    private final LocalDate date;
 
-    private TimeConvention convention;
+    private final TimeConvention convention;
 
     public enum TimeConvention{
         AM,
@@ -27,13 +28,13 @@ public class MeasurementData {
             }
             return null;
         }
-        public static TimeConvention Parse(String text){
+        public static Optional<TimeConvention> Parse(String text){
             if(text.equalsIgnoreCase("am") || text.contains("前")){
-                return AM;
+                return Optional.of(AM);
             }else if(text.equalsIgnoreCase("pm")|| text.contains("後")){
-                return PM;
+                return Optional.of(PM);
             }else{
-                return null;
+                return Optional.empty();
             }
         }
     }
