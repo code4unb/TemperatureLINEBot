@@ -3,10 +3,18 @@ package com.code4unb.TemperatureLINEBot.message.handler;
 import com.code4unb.TemperatureLINEBot.message.Flow;
 import com.code4unb.TemperatureLINEBot.message.FlowMessageHandler;
 import com.code4unb.TemperatureLINEBot.message.FlowResult;
+import com.code4unb.TemperatureLINEBot.message.Session;
 import com.code4unb.TemperatureLINEBot.model.MeasurementData;
 import com.code4unb.TemperatureLINEBot.model.ReceivedMessage;
+import com.linecorp.bot.client.LineMessagingClient;
+import com.linecorp.bot.model.action.DatetimePickerAction;
+import com.linecorp.bot.model.action.MessageAction;
+import com.linecorp.bot.model.event.postback.PostbackContent;
 import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.model.message.TextMessage;
+import com.linecorp.bot.model.message.quickreply.QuickReply;
+import com.linecorp.bot.model.message.quickreply.QuickReplyItem;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -18,18 +26,12 @@ import java.util.Optional;
 
 @Component
 public class TemperatureMessageHandler extends FlowMessageHandler {
+    @Autowired
+    LineMessagingClient client;
+
     public TemperatureMessageHandler(){
         super("入力","体温入力","体温","検温入力","検温");
         setHidden(true);
-    }
-
-    @Override
-    public boolean shouldHandle(String phrase){
-        if(super.shouldHandle(phrase)){
-            return true;
-        }else{
-            return parseFloat(phrase).isPresent();
-        }
     }
 
     @Override
@@ -45,6 +47,9 @@ public class TemperatureMessageHandler extends FlowMessageHandler {
                     public FlowResult handle(ReceivedMessage message) {
                         Optional<Float> parsed = parseFloat(message.getKeyPhrase());
                         if(parsed.isPresent() && (33f <= parsed.get() && parsed.get() < 43f)){
+                            Session session = sessionManager.findOrCreateSession(message.getSource().getUserId());
+                            session.addData("measured_data",new MeasurementData(String.format("%.1f", parsed.get()), LocalDate.now(), MeasurementData.TimeConvention.Now()));
+                            sessionManager.addSession(message.getSource().getUserId(),session);
                             return new FlowResult(Optional.empty(),true);
                         }else{
                             return new FlowResult(Optional.of(Collections.singletonList(TextMessage.builder().text("不正な入力値 " + message.getKeyPhrase() + " です。体温は33℃から43℃の範囲内で入力してください。").build())),false);
@@ -55,13 +60,20 @@ public class TemperatureMessageHandler extends FlowMessageHandler {
 
                     @Override
                     public Optional<List<Message>> postHandle() {
-                        return Optional.of(Collections.singletonList(TextMessage.builder().text("午前/午後(AM/PM)を入力してください。").build()));
+                        QuickReply quickReply = QuickReply.builder()
+                                .item(QuickReplyItem.builder().action(new MessageAction("am","午前")).build())
+                                .item(QuickReplyItem.builder().action(new MessageAction("pm","午後")).build())
+                                .build();
+                        return Optional.of(Collections.singletonList(TextMessage.builder().text("午前/午後(AM/PM)を入力してください。").quickReply(quickReply).build()));
                     }
 
                     @Override
                     public FlowResult handle(ReceivedMessage message) {
-                        Optional result = MeasurementData.TimeConvention.Parse(message.getKeyPhrase());
+                        Optional<MeasurementData.TimeConvention> result = MeasurementData.TimeConvention.Parse(message.getKeyPhrase());
                         if(result.isPresent()){
+                            Session session = sessionManager.findOrCreateSession(message.getSource().getUserId());
+                            session.addData("measured_data",((MeasurementData)session.getData("measured_data")).withConvention(result.get()));
+                            sessionManager.addSession(message.getSource().getUserId(),session);
                             return new FlowResult(Optional.empty(),true);
                         }else{
                             return new FlowResult(Optional.of(Collections.singletonList(TextMessage.builder().text("不正な入力値 " + message.getKeyPhrase() + " です。もう一度入力してください。").build())),false);
@@ -72,7 +84,43 @@ public class TemperatureMessageHandler extends FlowMessageHandler {
 
                     @Override
                     public Optional<List<Message>> postHandle() {
-                        return Optional.of(Collections.singletonList(TextMessage.builder().text("日付を入力してください。'今日' '昨日' '一昨日' もしくは直接日付を入力できます。例)6月29日→06-29").build()));
+                        QuickReply quickReply = QuickReply.builder()
+                                .item(QuickReplyItem.builder().action(new MessageAction("today","今日")).build())
+                                .item(QuickReplyItem.builder().action(new MessageAction("1day","昨日")).build())
+                                .item(QuickReplyItem.builder().action(new MessageAction("2day","一昨日")).build())
+                                .item(QuickReplyItem.builder().action(new DatetimePickerAction<LocalDate>() {
+                                    @Override
+                                    public String getLabel() {
+                                        return "選択";
+                                    }
+
+                                    @Override
+                                    public String getData() {
+                                        return "measure_date";
+                                    }
+
+                                    @Override
+                                    public Mode getMode() {
+                                        return Mode.DATE;
+                                    }
+
+                                    @Override
+                                    public LocalDate getInitial() {
+                                        return LocalDate.now();
+                                    }
+
+                                    @Override
+                                    public LocalDate getMax() {
+                                        return LocalDate.now();
+                                    }
+
+                                    @Override
+                                    public LocalDate getMin() {
+                                        return null;
+                                    }
+                                }).build())
+                                .build();
+                        return Optional.of(Collections.singletonList(TextMessage.builder().text("日付を入力してください。'今日' '昨日' '一昨日' もしくは直接日付を入力できます。例)6月29日→06-29").quickReply(quickReply).build()));
                     }
 
                     @Override
@@ -93,7 +141,10 @@ public class TemperatureMessageHandler extends FlowMessageHandler {
                                     date = LocalDate.parse(LocalDate.now(ZoneId.of(ZoneId.SHORT_IDS.get("JST"))).getYear()+"-"+message.getKeyPhrase());
                                     break;
                             }
-                            return new FlowResult(Optional.of(Collections.singletonList(TextMessage.builder().text(date.toString()).build())),true);
+                            Session session = sessionManager.findOrCreateSession(message.getSource().getUserId());
+                            session.addData("measured_data",((MeasurementData)session.getData("measured_data")).withDate(date));
+                            sessionManager.addSession(message.getSource().getUserId(),session);
+                            return new FlowResult(Optional.of(Collections.singletonList(TextMessage.builder().text(((MeasurementData)session.getData("measured_data")).toString()).build())),true);
                         }catch (Exception e){
                             return new FlowResult(Optional.of(Collections.singletonList(TextMessage.builder().text("不正な入力値 " + message.getKeyPhrase() + " です。もう一度入力してください。").build())),false);
                         }
@@ -104,23 +155,25 @@ public class TemperatureMessageHandler extends FlowMessageHandler {
 
     @Override
     protected List<Message> handleActivateMessage(ReceivedMessage message) {
-        Optional<Float> parsed = parseFloat(message.getKeyPhrase());
-        if (parsed.isPresent()) {
-            sessionManager.removeSession(message.getSource().getUserId());
-            float input = parsed.get();
-            if (33f <= input && input < 43f) {
-                MeasurementData data = MeasurementData.builder()
-                        .temperature(String.format("%.1f", input))
-                        .date(LocalDate.now())
-                        .convention(MeasurementData.TimeConvention.Now())
-                        .build();
-                return Collections.singletonList(TextMessage.builder().text(data.toString()).build());
-            } else {
-                return Collections.singletonList(TextMessage.builder().text("不正な入力値 " + input + " です。体温は33℃から43℃の範囲内で入力してください。").build());
-            }
-        } else {
-            return null;
+        return null;
+    }
+
+    @Override
+    public boolean doesHandlePostback(){
+        return true;
+    }
+
+    @Override
+    public List<Message> handlePostback(String line_id, PostbackContent content){
+        switch(content.getData()){
+            case "measure_date":
+                LocalDate date = LocalDate.parse(content.getParams().get("date"));
+                Session session = sessionManager.findOrCreateSession(line_id);
+                session.addData("measured_data",((MeasurementData)session.getData("measured_data")).withDate(date));
+                sessionManager.addSession(line_id,session);
+                return Collections.singletonList(TextMessage.builder().text(((MeasurementData)session.getData("measured_data")).toString()).build());
         }
+        return null;
     }
 
     private Optional<Float> parseFloat(String text){
