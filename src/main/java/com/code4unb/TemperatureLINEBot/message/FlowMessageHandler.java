@@ -120,7 +120,12 @@ public abstract class FlowMessageHandler extends MessageHandlerBase{
         session.get().refresh();
         session.get().removeData("postback");
 
-        return handlePostback(message.getSource().getUserId(),content);
+        List<Message> result = handlePostback(message.getSource().getUserId(),content);;
+        ((MessageFlow)session.get().getData(ID_MESSAGE_FLOW)).skipThisFlow();
+        if(((MessageFlow)session.get().getData(ID_MESSAGE_FLOW)).isCompleted()){
+            sessionManager.removeSession(message.getSource().getUserId());
+        }
+        return result;
     }
 
     public List<Message> handlePostback(String line_id,PostbackContent content){
