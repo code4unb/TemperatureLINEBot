@@ -1,16 +1,17 @@
 package com.code4unb.TemperatureLINEBot.message;
 
 import com.code4unb.TemperatureLINEBot.model.ReceivedMessage;
+import com.linecorp.bot.model.action.DatetimePickerAction;
+import com.linecorp.bot.model.event.postback.PostbackContent;
 import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.model.message.TextMessage;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
+@Slf4j
 public abstract class FlowMessageHandler extends MessageHandlerBase{
 
     protected final List<Flow> flow;
@@ -74,7 +75,55 @@ public abstract class FlowMessageHandler extends MessageHandlerBase{
             if(((MessageFlow)session.get().getData(ID_MESSAGE_FLOW)).isCompleted()) {
                 sessionManager.removeSession(currentUserId);
             }
+            if(result != null){
+                result.stream()
+                        .filter(x->x.getQuickReply()!=null)
+                        .flatMap(x->x.getQuickReply()
+                                .getItems()
+                                .stream()
+                                .filter(y->(y.getAction() instanceof DatetimePickerAction))
+                                .map(y->(DatetimePickerAction)y.getAction())
+                                .map(y->y.getData())
+                        )
+                        .forEach(x->addPostback(message.getSource().getUserId(),x));
+            }
             return result;
         }
+    }
+
+    protected void addPostback(String line_id,String data){
+        log.info("add postback:"+data);
+        Session session = sessionManager.findOrCreateSession(line_id);
+        if(!session.hasData("postback")){
+            session.addData("postback",new HashSet<String>());
+        }
+        ((Set)session.getData("postback")).add(data);
+        sessionManager.addSession(line_id,session);
+    }
+
+    public boolean doesHandlePostback(){
+        return false;
+    }
+
+    public boolean shouldHandlePostback(String line_id,String data){
+        if(!doesHandlePostback()) return false;
+        Optional<Session> session = sessionManager.findSession(line_id);
+        if(session.isPresent() && session.get().hasData("postback") && ((Set)session.get().getData("postback")).contains(data)){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public final List<Message> onPostback(ReceivedMessage message, PostbackContent content){
+        Optional<Session> session = sessionManager.findSession(message.getSource().getUserId());
+        session.get().refresh();
+        session.get().removeData("postback");
+
+        return handlePostback(message.getSource().getUserId(),content);
+    }
+
+    public List<Message> handlePostback(String line_id,PostbackContent content){
+        return null;
     }
 }
