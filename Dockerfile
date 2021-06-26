@@ -1,4 +1,4 @@
-FROM openjdk:11-jdk-alpine
+FROM openjdk:jdk-11.0.11_9-alpine
 ARG JAR_FILE
 ENV LINE_BOT_CHANNEL_SECRET xxx
 ENV LINE_BOT_CHANNEL_TOKEN xxx
