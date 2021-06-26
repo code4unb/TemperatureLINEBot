@@ -1,14 +1,16 @@
 package com.code4unb.TemperatureLINEBot.model;
 
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Optional;
 
+@AllArgsConstructor
 @Builder
 @Getter
+@With
+@ToString
 public class MeasurementData {
     private final String temperature;
 

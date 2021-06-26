@@ -37,6 +37,14 @@ public class Session {
         return data.get(key);
     }
 
+    public void removeData(String key){
+        data.remove(key);
+    }
+
+    public boolean hasData(String key){
+        return data.containsKey(key);
+    }
+
     public boolean isExpired(){
         return refreshedDate.plusSeconds(expirationSecond).isBefore(Instant.now());
     }

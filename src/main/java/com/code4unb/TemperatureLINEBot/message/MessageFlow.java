@@ -27,6 +27,10 @@ public class MessageFlow {
         flows.remove(index);
     }
 
+    public void skipThisFlow(){
+        currentIndex++;
+    }
+
     public boolean isCompleted(){
         return currentIndex+1>flows.size();
     }
@@ -43,6 +47,7 @@ public class MessageFlow {
     public Flow getCurrentFlow(){
         return flows.get(currentIndex);
     }
+
     public Optional<Flow> getNextFlow(){
         if(currentIndex+1<flows.size()){
             return Optional.of(flows.get(currentIndex+1));
