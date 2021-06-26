@@ -1,7 +1,8 @@
 package com.code4unb.TemperatureLINEBot;
 
 import com.code4unb.TemperatureLINEBot.message.*;
-import com.code4unb.TemperatureLINEBot.model.ReceivedMessage;
+import com.code4unb.TemperatureLINEBot.model.MessageReply;
+import com.code4unb.TemperatureLINEBot.model.PostbackReply;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.PostbackEvent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
@@ -32,7 +33,7 @@ public class MessageController {
 
     @EventMapping
     public List<Message> handleTextMessageEvent(MessageEvent<TextMessageContent> event){
-        ReceivedMessage message = ReceivedMessage.Build(event);
+        MessageReply message = MessageReply.Build(event);
         log.info("Message received :"+message.getKeyPhrase());
 
         Optional<Session> session = sessionManager.findSession(message.getSource().getUserId());
@@ -51,10 +52,17 @@ public class MessageController {
 
     @EventMapping
     public List<Message> handlePostBackEvent(PostbackEvent event){
-        log.info("received post back event");
-        Optional<FlowMessageHandler> handler =  flowHandlers.stream()
-                .filter(x->x.shouldHandlePostback(event.getSource().getUserId(),event.getPostbackContent().getData()))
-                .findFirst();
-        return handler.map(flowMessageHandler -> flowMessageHandler.onPostback(new ReceivedMessage(event.getTimestamp(),event.getSource(),null,null,null), event.getPostbackContent())).orElse(null);
+        PostbackReply reply = PostbackReply.Build(event);
+        log.info("Postback received :"+reply.getData());
+
+        Optional<Session> session = sessionManager.findSession(reply.getSource().getUserId());
+
+        if(session.isPresent() && !session.get().isExpired() && !((MessageFlow)session.get().getData(FlowMessageHandler.ID_MESSAGE_FLOW)).isCompleted()){
+            MessageHandlerBase handler =  handlers.get((String)session.get().getData(FlowMessageHandler.ID_HANDLER_TYPE));
+            if(handler instanceof FlowMessageHandler){
+                return ((FlowMessageHandler)handler).onPostback(reply);
+            }
+        }
+        return null;
     }
 }

@@ -1,6 +1,8 @@
 package com.code4unb.TemperatureLINEBot.message;
 
-import com.code4unb.TemperatureLINEBot.model.ReceivedMessage;
+import com.code4unb.TemperatureLINEBot.model.MessageReply;
+import com.code4unb.TemperatureLINEBot.model.PostbackReply;
+import com.code4unb.TemperatureLINEBot.model.Reply;
 import com.linecorp.bot.model.message.Message;
 import lombok.Getter;
 import lombok.NonNull;
@@ -56,9 +58,17 @@ public class MessageFlow {
         }
     }
 
-    public List<Message> handleNextFlow(ReceivedMessage message){
+    public List<Message> handleNextFlow(Reply reply){
         if(isCompleted()) return null;
-        FlowResult result = flows.get(currentIndex).handle(message);
+        FlowResult result;
+        if(reply instanceof MessageReply){
+            result = getCurrentFlow().handle((MessageReply) reply);
+        }else if(reply instanceof PostbackReply && getCurrentFlow() instanceof PostBackFlow){
+            result = ((PostBackFlow)getCurrentFlow()).handlePostback((PostbackReply) reply);
+        }else{
+            return null;
+        }
+
         if(result.isSucceed()){
             List<Message> resultMessage = new ArrayList<>();
 

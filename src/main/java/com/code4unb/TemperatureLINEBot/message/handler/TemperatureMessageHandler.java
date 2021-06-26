@@ -1,15 +1,12 @@
 package com.code4unb.TemperatureLINEBot.message.handler;
 
-import com.code4unb.TemperatureLINEBot.message.Flow;
-import com.code4unb.TemperatureLINEBot.message.FlowMessageHandler;
-import com.code4unb.TemperatureLINEBot.message.FlowResult;
-import com.code4unb.TemperatureLINEBot.message.Session;
+import com.code4unb.TemperatureLINEBot.message.*;
 import com.code4unb.TemperatureLINEBot.model.MeasurementData;
-import com.code4unb.TemperatureLINEBot.model.ReceivedMessage;
+import com.code4unb.TemperatureLINEBot.model.MessageReply;
+import com.code4unb.TemperatureLINEBot.model.PostbackReply;
 import com.linecorp.bot.client.LineMessagingClient;
 import com.linecorp.bot.model.action.DatetimePickerAction;
 import com.linecorp.bot.model.action.MessageAction;
-import com.linecorp.bot.model.event.postback.PostbackContent;
 import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.model.message.TextMessage;
 import com.linecorp.bot.model.message.quickreply.QuickReply;
@@ -44,7 +41,7 @@ public class TemperatureMessageHandler extends FlowMessageHandler {
                     }
 
                     @Override
-                    public FlowResult handle(ReceivedMessage message) {
+                    public FlowResult handle(MessageReply message) {
                         Optional<Float> parsed = parseFloat(message.getKeyPhrase());
                         if(parsed.isPresent() && (33f <= parsed.get() && parsed.get() < 43f)){
                             Session session = sessionManager.findOrCreateSession(message.getSource().getUserId());
@@ -68,7 +65,7 @@ public class TemperatureMessageHandler extends FlowMessageHandler {
                     }
 
                     @Override
-                    public FlowResult handle(ReceivedMessage message) {
+                    public FlowResult handle(MessageReply message) {
                         Optional<MeasurementData.TimeConvention> result = MeasurementData.TimeConvention.Parse(message.getKeyPhrase());
                         if(result.isPresent()){
                             Session session = sessionManager.findOrCreateSession(message.getSource().getUserId());
@@ -80,7 +77,23 @@ public class TemperatureMessageHandler extends FlowMessageHandler {
                         }
                     }
                 },
-                new Flow(){
+                new PostBackFlow(){
+
+                    @Override
+                    public FlowResult handlePostback(PostbackReply reply) {
+                        switch(reply.getContent().getData()){
+                            case "measure_date":
+                                LocalDate date = LocalDate.parse(reply.getContent().getParams().get("date"));
+                                Session session = sessionManager.findOrCreateSession(reply.getSource().getUserId());
+                                session.addData("measured_data",((MeasurementData)session.getData("measured_data")).withDate(date));
+                                sessionManager.addSession(reply.getSource().getUserId(),session);
+                                return FlowResult.builder()
+                                        .result(Optional.of(Collections.singletonList(TextMessage.builder().text(((MeasurementData)session.getData("measured_data")).toString()).build())))
+                                        .succeed(true)
+                                        .build();
+                        }
+                        return new FlowResult(Optional.of(Collections.singletonList(TextMessage.builder().text("エラーが発生しました。").build())),false);
+                    }
 
                     @Override
                     public Optional<List<Message>> postHandle() {
@@ -124,7 +137,7 @@ public class TemperatureMessageHandler extends FlowMessageHandler {
                     }
 
                     @Override
-                    public FlowResult handle(ReceivedMessage message) {
+                    public FlowResult handle(MessageReply message) {
                         LocalDate date;
                         try{
                             switch(message.getKeyPhrase()){
@@ -154,25 +167,7 @@ public class TemperatureMessageHandler extends FlowMessageHandler {
     }
 
     @Override
-    protected List<Message> handleActivateMessage(ReceivedMessage message) {
-        return null;
-    }
-
-    @Override
-    public boolean doesHandlePostback(){
-        return true;
-    }
-
-    @Override
-    public List<Message> handlePostback(String line_id, PostbackContent content){
-        switch(content.getData()){
-            case "measure_date":
-                LocalDate date = LocalDate.parse(content.getParams().get("date"));
-                Session session = sessionManager.findOrCreateSession(line_id);
-                session.addData("measured_data",((MeasurementData)session.getData("measured_data")).withDate(date));
-                sessionManager.addSession(line_id,session);
-                return Collections.singletonList(TextMessage.builder().text(((MeasurementData)session.getData("measured_data")).toString()).build());
-        }
+    protected List<Message> handleActivateMessage(MessageReply message) {
         return null;
     }
 

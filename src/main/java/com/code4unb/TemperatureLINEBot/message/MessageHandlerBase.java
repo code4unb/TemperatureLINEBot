@@ -1,6 +1,6 @@
 package com.code4unb.TemperatureLINEBot.message;
 
-import com.code4unb.TemperatureLINEBot.model.ReceivedMessage;
+import com.code4unb.TemperatureLINEBot.model.MessageReply;
 import com.linecorp.bot.model.message.Message;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -30,5 +30,5 @@ public abstract class MessageHandlerBase{
         return Arrays.stream(Aliases).anyMatch(x->x.equalsIgnoreCase(phrase));
     }
 
-    public abstract List<Message> handleMessage(ReceivedMessage message);
+    public abstract List<Message> handleMessage(MessageReply message);
 }

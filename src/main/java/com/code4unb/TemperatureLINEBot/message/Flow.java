@@ -1,6 +1,6 @@
 package com.code4unb.TemperatureLINEBot.message;
 
-import com.code4unb.TemperatureLINEBot.model.ReceivedMessage;
+import com.code4unb.TemperatureLINEBot.model.MessageReply;
 import com.linecorp.bot.model.message.Message;
 
 import java.util.List;
@@ -13,5 +13,5 @@ public abstract class Flow {
 
     public abstract Optional<List<Message>> postHandle();
 
-    public abstract FlowResult handle(ReceivedMessage message);
+    public abstract FlowResult handle(MessageReply message);
 }

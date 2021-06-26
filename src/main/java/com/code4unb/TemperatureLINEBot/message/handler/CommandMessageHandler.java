@@ -2,7 +2,7 @@ package com.code4unb.TemperatureLINEBot.message.handler;
 
 import com.code4unb.TemperatureLINEBot.message.MessageHandlerBase;
 import com.code4unb.TemperatureLINEBot.message.SingleMessageHandler;
-import com.code4unb.TemperatureLINEBot.model.ReceivedMessage;
+import com.code4unb.TemperatureLINEBot.model.MessageReply;
 import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.model.message.TextMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ public class CommandMessageHandler extends SingleMessageHandler {
     }
 
     @Override
-    public List<Message> handleMessage(ReceivedMessage message) {
+    public List<Message> handleMessage(MessageReply message) {
         String text = String.join(",",Handlers.stream().map(x->x.getKeyPhrase()).toArray(String[]::new));
         return Collections.singletonList(TextMessage.builder().text(text).build());
     }
