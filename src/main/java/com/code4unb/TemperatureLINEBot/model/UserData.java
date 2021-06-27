@@ -33,6 +33,15 @@ public class UserData {
         return Grade.ordinal()+1+"年"+Class_+"組"+Number+"番"+LastName+" "+FirstName;
     }
 
+    @Getter
+    @AllArgsConstructor
+    @EqualsAndHashCode
+    public static class ClassRoom{
+        private final Grades grade;
+
+        private final int class_;
+    }
+
     public enum Grades {
         First,
         Second,
