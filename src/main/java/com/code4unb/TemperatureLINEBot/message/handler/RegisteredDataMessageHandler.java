@@ -1,10 +1,10 @@
 package com.code4unb.TemperatureLINEBot.message.handler;
 
-import com.code4unb.TemperatureLINEBot.UserData;
 import com.code4unb.TemperatureLINEBot.db.UserDataEntity;
 import com.code4unb.TemperatureLINEBot.db.UserDataRepository;
 import com.code4unb.TemperatureLINEBot.message.SingleMessageHandler;
 import com.code4unb.TemperatureLINEBot.model.MessageReply;
+import com.code4unb.TemperatureLINEBot.model.UserData;
 import com.code4unb.TemperatureLINEBot.util.FlexJson;
 import com.linecorp.bot.model.message.FlexMessage;
 import com.linecorp.bot.model.message.Message;

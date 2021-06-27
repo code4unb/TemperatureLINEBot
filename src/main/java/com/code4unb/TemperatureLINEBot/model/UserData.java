@@ -1,4 +1,4 @@
-package com.code4unb.TemperatureLINEBot;
+package com.code4unb.TemperatureLINEBot.model;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -6,24 +6,27 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @EqualsAndHashCode(of = {"LineID"})
+@Getter
 public class UserData {
-    @Getter
     private final String LineID;
 
-    @Getter
     private final Grades Grade;
 
-    @Getter
     private final int Class_;
 
-    @Getter
     private final int Number;
 
-    @Getter
     private final String FirstName;
 
-    @Getter
     private final String LastName;
+
+    public ClassRoom getClassRoom(){
+        return new ClassRoom(Grade, Class_);
+    }
+
+    public String getName(){
+        return LastName+" "+FirstName;
+    }
 
     @Override
     public String toString(){

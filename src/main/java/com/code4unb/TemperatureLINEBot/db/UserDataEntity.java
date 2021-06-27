@@ -1,8 +1,10 @@
 package com.code4unb.TemperatureLINEBot.db;
 
-import com.code4unb.TemperatureLINEBot.UserData;
-import com.code4unb.TemperatureLINEBot.UserData.Grades;
-import lombok.*;
+import com.code4unb.TemperatureLINEBot.model.UserData;
+import com.code4unb.TemperatureLINEBot.model.UserData.Grades;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.With;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.relational.core.mapping.Column;
