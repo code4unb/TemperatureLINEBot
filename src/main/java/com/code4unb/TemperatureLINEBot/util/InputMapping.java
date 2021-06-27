@@ -99,6 +99,10 @@ public class InputMapping {
         return Optional.ofNullable(mappings.get(classRoom));
     }
 
+    public static Set<UserData.ClassRoom> getAllClassrooms(){
+        return mappings.keySet();
+    }
+
     private static InputMapping load(UserData.ClassRoom classRoom){
         String path = String.format(DIR+"/mapping_%d_%d.json",classRoom.getGrade().ordinal()+1,classRoom.getClass_());
 
