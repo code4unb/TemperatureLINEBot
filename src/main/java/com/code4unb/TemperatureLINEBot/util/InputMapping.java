@@ -30,7 +30,7 @@ public class InputMapping {
         mappings = new HashMap<>();
 
         Pattern pattern = Pattern.compile("mapping_([0-9])_([0-9]+).json");
-        InputMapping.class.getClassLoader().resources(DIR+"/")
+        InputMapping.class.getClassLoader().resources(DIR)
                 .flatMap(x-> Arrays.stream(new File(x.getFile()).listFiles()).map(y->y.getName()))
                 .map(x->pattern.matcher(x))
                 .filter(x->x.matches())
