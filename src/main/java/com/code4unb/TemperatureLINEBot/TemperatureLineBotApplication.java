@@ -9,12 +9,6 @@ import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.info.BuildProperties;
-
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.Properties;
-import java.util.Set;
 
 @SpringBootApplication
 public class TemperatureLineBotApplication {
