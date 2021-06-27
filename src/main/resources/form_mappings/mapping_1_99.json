@@ -1,0 +1,37 @@
+{
+  "form_id": "1FAIpQLSeNYUX2bc22ZoYUsN-GBccynbgMaZ1hx12hf8icvAYr4CAgJQ",
+  "mappings": [
+    {
+      "input_id": "638235148",
+      "value": "%date"
+    },
+    {
+      "input_id": "840348863",
+      "value": "%time_convention"
+    },
+    {
+      "input_id": "1078510918",
+      "value": "%number"
+    },
+    {
+      "input_id": "1201501566",
+      "value": "%name"
+    },
+    {
+      "input_id": "631919205",
+      "value": "%temperature"
+    },
+    {
+      "input_id": "568833490",
+      "value": "該当なし（健康である）"
+    },
+    {
+      "input_id": "415859196",
+      "value": "該当なし"
+    },
+    {
+      "input_id": "815649948",
+      "value": "該当なし"
+    }
+  ]
+}

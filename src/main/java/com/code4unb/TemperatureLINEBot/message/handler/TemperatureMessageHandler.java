@@ -1,10 +1,13 @@
 package com.code4unb.TemperatureLINEBot.message.handler;
 
+import com.code4unb.TemperatureLINEBot.db.UserDataEntity;
+import com.code4unb.TemperatureLINEBot.db.UserDataRepository;
 import com.code4unb.TemperatureLINEBot.message.*;
 import com.code4unb.TemperatureLINEBot.model.MeasurementData;
 import com.code4unb.TemperatureLINEBot.model.MessageReply;
 import com.code4unb.TemperatureLINEBot.model.PostbackReply;
-import com.linecorp.bot.client.LineMessagingClient;
+import com.code4unb.TemperatureLINEBot.model.UserData;
+import com.code4unb.TemperatureLINEBot.util.Forms;
 import com.linecorp.bot.model.action.DatetimePickerAction;
 import com.linecorp.bot.model.action.MessageAction;
 import com.linecorp.bot.model.message.Message;
@@ -24,7 +27,7 @@ import java.util.Optional;
 @Component
 public class TemperatureMessageHandler extends FlowMessageHandler {
     @Autowired
-    LineMessagingClient client;
+    UserDataRepository userDataRepository;
 
     public TemperatureMessageHandler(){
         super("入力","体温入力","体温","検温入力","検温");
@@ -87,8 +90,18 @@ public class TemperatureMessageHandler extends FlowMessageHandler {
                                 Session session = sessionManager.findOrCreateSession(reply.getSource().getUserId());
                                 session.addData("measured_data",((MeasurementData)session.getData("measured_data")).withDate(date));
                                 sessionManager.addSession(reply.getSource().getUserId(),session);
+
+                                Optional<UserDataEntity> optional =  userDataRepository.findByLineID(reply.getSource().getUserId());
+                                if(!optional.isPresent()){
+                                    sessionManager.removeSession(reply.getSource().getUserId());
+                                    return new FlowResult(Optional.of(Collections.singletonList(TextMessage.builder().text("ユーザー登録がされていません。'登録'と入力して登録手続きを行ってください。").build())),false);
+                                }
+                                UserData data = optional.get().toUserData();
+
+                                int states = Forms.submit(data,((MeasurementData)session.getData("measured_data")));
+
                                 return FlowResult.builder()
-                                        .result(Optional.of(Collections.singletonList(TextMessage.builder().text(((MeasurementData)session.getData("measured_data")).toString()).build())))
+                                        .result(Optional.of(Collections.singletonList(TextMessage.builder().text(String.valueOf(states)).build())))
                                         .succeed(true)
                                         .build();
                         }
@@ -168,6 +181,18 @@ public class TemperatureMessageHandler extends FlowMessageHandler {
 
     @Override
     protected List<Message> handleActivateMessage(MessageReply message) {
+        Optional<UserDataEntity> optional =  userDataRepository.findByLineID(message.getSource().getUserId());
+        if(!optional.isPresent()){
+            sessionManager.removeSession(message.getSource().getUserId());
+            return Collections.singletonList(TextMessage.builder().text("ユーザー登録がされていません。'登録'と入力して登録手続きを行ってください。").build());
+        }
+        UserData data = optional.get().toUserData();
+
+        if(!Forms.isAvailableClassroom(data.getClassRoom())){
+            sessionManager.removeSession(message.getSource().getUserId());
+            return Collections.singletonList(TextMessage.builder().text("あなたのホームルームは現在非対応です。開発者まで連絡をいただければあなたのホームルームに対応することが可能です。").build());
+        }
+
         return null;
     }
 
