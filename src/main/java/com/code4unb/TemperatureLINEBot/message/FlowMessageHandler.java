@@ -53,7 +53,7 @@ public abstract class FlowMessageHandler extends MessageHandlerBase{
             if (handleResult != null) {
                 result.addAll(handleResult);
             }
-            ((MessageFlow) sessionManager.findSession(currentUserId).get().getData(ID_MESSAGE_FLOW)).getCurrentFlow().postHandle().ifPresent(result::addAll);
+            if(sessionManager.findSession(currentUserId).isPresent())((MessageFlow) sessionManager.findSession(currentUserId).get().getData(ID_MESSAGE_FLOW)).getCurrentFlow().postHandle().ifPresent(result::addAll);
             if (result.size() == 0) return null;
             return result;
         }else{
