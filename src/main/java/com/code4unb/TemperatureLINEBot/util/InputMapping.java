@@ -3,6 +3,7 @@ package com.code4unb.TemperatureLINEBot.util;
 import com.code4unb.TemperatureLINEBot.model.UserData;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,7 +21,8 @@ public class InputMapping {
     private String formId;
 
     @JsonProperty("mappings")
-    private Set<MappingItem> mappingItems;
+    @JsonDeserialize(as=LinkedHashSet.class)
+    private LinkedHashSet<MappingItem> mappingItems;
 
     public static final String DIR = "form_mappings";
 

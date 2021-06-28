@@ -12,6 +12,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.nio.charset.StandardCharsets;
+import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -53,7 +54,7 @@ public class Forms {
                         .replace("%number",String.valueOf(user.getNumber()))
                         .replace("%name",user.getName())
                         .replace("%temperature",data.getTemperature())
-        )).collect(Collectors.toSet());
+        )).collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     public static boolean isAvailableClassroom(UserData.ClassRoom classRoom){
