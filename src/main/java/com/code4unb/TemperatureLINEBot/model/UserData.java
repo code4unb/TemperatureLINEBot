@@ -40,6 +40,11 @@ public class UserData {
         private final Grades grade;
 
         private final int class_;
+
+        @Override
+        public String toString(){
+            return grade.ordinal()+1+"-"+class_;
+        }
     }
 
     public enum Grades {

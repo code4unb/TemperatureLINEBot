@@ -48,6 +48,7 @@ public class Forms {
     public static Set<FormsParam> createParams(InputMapping mapping, UserData user, MeasurementData data){
         return mapping.getMappingItems().stream().map(x->new FormsParam(
                 x.inputId,
+                x.name,
                 x.value
                         .replace("%date",data.getDate().toString())
                         .replace("%time_convention",data.getConvention()==MeasurementData.TimeConvention.AM?"午前9:00":"午後16:00")
@@ -65,6 +66,8 @@ public class Forms {
     @AllArgsConstructor
     public static class FormsParam{
         private String entry;
+
+        private String name;
 
         private String value;
     }

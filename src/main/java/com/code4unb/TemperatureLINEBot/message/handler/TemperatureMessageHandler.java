@@ -111,9 +111,9 @@ public class TemperatureMessageHandler extends FlowMessageHandler {
                     @Override
                     public Optional<List<Message>> postHandle() {
                         QuickReply quickReply = QuickReply.builder()
-                                .item(QuickReplyItem.builder().action(new MessageAction("today","今日")).build())
-                                .item(QuickReplyItem.builder().action(new MessageAction("1day","昨日")).build())
-                                .item(QuickReplyItem.builder().action(new MessageAction("2day","一昨日")).build())
+                                .item(QuickReplyItem.builder().action(new MessageAction("今日","今日")).build())
+                                .item(QuickReplyItem.builder().action(new MessageAction("昨日","昨日")).build())
+                                .item(QuickReplyItem.builder().action(new MessageAction("一昨日","一昨日")).build())
                                 .item(QuickReplyItem.builder().action(new DatetimePickerAction<LocalDate>() {
                                     @Override
                                     public String getLabel() {
