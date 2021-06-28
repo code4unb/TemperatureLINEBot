@@ -3,34 +3,42 @@
   "mappings": [
     {
       "input_id": "638235148",
+      "name":  "日時",
       "value": "%date"
     },
     {
       "input_id": "840348863",
+      "name":  "AM/PM",
       "value": "%time_convention"
     },
     {
       "input_id": "1078510918",
+      "name":  "出席番号",
       "value": "%number"
     },
     {
       "input_id": "1201501566",
+      "name":  "名前",
       "value": "%name"
     },
     {
       "input_id": "631919205",
+      "name":  "体温",
       "value": "%temperature"
     },
     {
       "input_id": "568833490",
+      "name":  "症状等",
       "value": "該当なし（健康である）"
     },
     {
       "input_id": "415859196",
+      "name":  "行動歴",
       "value": "該当なし"
     },
     {
       "input_id": "815649948",
+      "name":  "PCR検査",
       "value": "該当なし"
     }
   ]

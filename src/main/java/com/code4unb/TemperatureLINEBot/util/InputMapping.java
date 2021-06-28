@@ -133,6 +133,9 @@ public class InputMapping {
         @JsonProperty("input_id")
         String inputId;
 
+        @JsonProperty("name")
+        String name;
+
         @JsonProperty("value")
         String value;
     }
