@@ -73,7 +73,7 @@ public class MessageFlow {
             List<Message> resultMessage = new ArrayList<>();
 
             result.getResult().ifPresent(resultMessage::addAll);
-            getNextFlow().flatMap(Flow::postHandle).ifPresent(resultMessage::addAll);
+            getNextFlow().flatMap(flow -> flow.postHandle(reply.getSource())).ifPresent(resultMessage::addAll);
 
             currentIndex++;
 

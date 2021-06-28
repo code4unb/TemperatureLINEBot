@@ -18,14 +18,14 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Forms {
-    public static final String REQUEST_URL = "https://docs.google.com/forms/d/e/%s/formResponse";
+    public static final String REQUEST_URL = "https://docs.google.com/forms/d/e/%s/";
 
     public static int submit(UserData user, MeasurementData data){
         Optional<InputMapping> optionalMapping =  InputMapping.getInstance(user.getClassRoom());
         if(!optionalMapping.isPresent())return -1;
         InputMapping mapping = optionalMapping.get();
 
-        String path = String.format(REQUEST_URL,mapping.getFormId());
+        String path = String.format(REQUEST_URL+"formResponse",mapping.getFormId());
         String param = createParams(mapping,user,data).stream().map(x->String.format("entry.%s=%s",x.entry,URLEncoder.encode(x.value,StandardCharsets.UTF_8))).collect(Collectors.joining("&"));
 
         HttpClient client = HttpClient.newHttpClient();
@@ -43,6 +43,16 @@ public class Forms {
             e.printStackTrace();
         }
         return -1;
+    }
+
+    public static URI getEditableFormUri(UserData user,MeasurementData data){
+        Optional<InputMapping> optionalMapping =  InputMapping.getInstance(user.getClassRoom());
+        if(!optionalMapping.isPresent())return null;
+        InputMapping mapping = optionalMapping.get();
+        String path = String.format(REQUEST_URL+"viewform",mapping.getFormId());
+        String param = createParams(mapping,user,data).stream().map(x->String.format("entry.%s=%s",x.entry,URLEncoder.encode(x.value,StandardCharsets.UTF_8))).collect(Collectors.joining("&"));
+
+        return URI.create(path +"?"+param);
     }
 
     public static Set<FormsParam> createParams(InputMapping mapping, UserData user, MeasurementData data){

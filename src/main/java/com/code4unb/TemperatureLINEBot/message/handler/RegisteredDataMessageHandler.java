@@ -5,7 +5,7 @@ import com.code4unb.TemperatureLINEBot.db.UserDataRepository;
 import com.code4unb.TemperatureLINEBot.message.SingleMessageHandler;
 import com.code4unb.TemperatureLINEBot.model.MessageReply;
 import com.code4unb.TemperatureLINEBot.model.UserData;
-import com.code4unb.TemperatureLINEBot.util.FlexJson;
+import com.code4unb.TemperatureLINEBot.util.FlexMessages;
 import com.linecorp.bot.model.message.FlexMessage;
 import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.model.message.TextMessage;
@@ -29,9 +29,9 @@ public class RegisteredDataMessageHandler extends SingleMessageHandler {
         Optional<UserDataEntity> entity = userDataRepository.findByLineID(message.getSource().getUserId());
         if(entity.isPresent()){
             UserData data = entity.get().toUserData();
-            String json = FlexJson.LoadMessageJson("registered-data");
+            String json = FlexMessages.LoadJsonFromJsonFile("registered-data");
             json = String.format(json,data.getLastName(),data.getFirstName(),data.getGrade().ordinal()+1,data.getClass_(),data.getNumber());
-            return Collections.singletonList(new FlexMessage("registered-data",FlexJson.CreateFlexContainer(json)));
+            return Collections.singletonList(new FlexMessage("registered-data", FlexMessages.LoadContainerFromJson(json)));
         }else{
             return Collections.singletonList(TextMessage.builder().text("登録情報がありません。先に '登録' と入力してユーザー情報を登録してください。").build());
         }

@@ -7,7 +7,8 @@ import com.code4unb.TemperatureLINEBot.message.FlowMessageHandler;
 import com.code4unb.TemperatureLINEBot.message.FlowResult;
 import com.code4unb.TemperatureLINEBot.model.MessageReply;
 import com.code4unb.TemperatureLINEBot.model.UserData;
-import com.code4unb.TemperatureLINEBot.util.FlexJson;
+import com.code4unb.TemperatureLINEBot.util.FlexMessages;
+import com.linecorp.bot.model.event.source.Source;
 import com.linecorp.bot.model.message.FlexMessage;
 import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.model.message.TextMessage;
@@ -33,7 +34,7 @@ public class RegisterMessageHandler extends FlowMessageHandler {
                 new Flow(){
 
                     @Override
-                    public Optional<List<Message>> postHandle() {
+                    public Optional<List<Message>> postHandle(Source source) {
                         return Optional.empty();
                     }
 
@@ -63,7 +64,7 @@ public class RegisterMessageHandler extends FlowMessageHandler {
 
     @Override
     protected List<Message> handleActivateMessage(MessageReply message) {
-        return Collections.singletonList(new FlexMessage("register",FlexJson.LoadFlexContainer("register")));
+        return Collections.singletonList(new FlexMessage("register", FlexMessages.LoadContainerFromJsonFile("register")));
     }
 
     private UserData tryParse(String lineID,String[] args){
