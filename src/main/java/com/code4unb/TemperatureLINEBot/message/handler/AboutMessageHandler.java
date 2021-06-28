@@ -2,7 +2,7 @@ package com.code4unb.TemperatureLINEBot.message.handler;
 
 import com.code4unb.TemperatureLINEBot.message.SingleMessageHandler;
 import com.code4unb.TemperatureLINEBot.model.MessageReply;
-import com.code4unb.TemperatureLINEBot.util.FlexJson;
+import com.code4unb.TemperatureLINEBot.util.FlexMessages;
 import com.linecorp.bot.model.message.FlexMessage;
 import com.linecorp.bot.model.message.Message;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +24,8 @@ public class AboutMessageHandler extends SingleMessageHandler {
 
     @Override
     public List<Message> handleMessage(MessageReply message) {
-        String json = FlexJson.LoadMessageJson("about");
+        String json = FlexMessages.LoadJsonFromJsonFile("about");
         json = String.format(json, buildProperties.getName(), buildProperties.getVersion(), buildProperties.getTime().atZone(ZoneId.systemDefault()).toString());
-        return Collections.singletonList(new FlexMessage("version:"+buildProperties.getVersion(),FlexJson.CreateFlexContainer(json)));
+        return Collections.singletonList(new FlexMessage("version:"+buildProperties.getVersion(), FlexMessages.LoadContainerFromJson(json)));
     }
 }
