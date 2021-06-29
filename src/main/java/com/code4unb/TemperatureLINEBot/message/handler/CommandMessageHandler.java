@@ -23,7 +23,7 @@ public class CommandMessageHandler extends SingleMessageHandler {
 
     @Override
     public List<Message> handleMessage(MessageReply message) {
-        String text = String.join(",",Handlers.stream().map(x->x.getKeyPhrase()).toArray(String[]::new));
+        String text = String.join(",",Handlers.stream().filter(x->!x.isHidden()).map(x->x.getKeyPhrase()).toArray(String[]::new));
         return Collections.singletonList(TextMessage.builder().text(text).build());
     }
 }
