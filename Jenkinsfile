@@ -69,7 +69,7 @@ pipeline {
               sh 'export LINE_BOT_CHANNEL_SECRET=$LINE_BOT_CHANNEL_SECRET'
               sh 'export LINE_BOT_CHANNEL_TOKEN=$LINE_BOT_CHANNEL_TOKEN'
               sh 'export POSTGRES_PASSWORD=$POSTGRES_PASSWORD'
-              sh 'docker-compose -f docker-compose-shared.yml up -d'
+              sh 'docker-compose -f docker-compose-shared.yml up -d -p "temperaturelinebot_shared"'
               sh './gradlew composeUp'
             }
           }
@@ -89,7 +89,7 @@ pipeline {
               sh 'export LINE_BOT_CHANNEL_SECRET=$LINE_BOT_CHANNEL_SECRET'
               sh 'export LINE_BOT_CHANNEL_TOKEN=$LINE_BOT_CHANNEL_TOKEN'
               sh 'export POSTGRES_PASSWORD=$POSTGRES_PASSWORD'
-              sh 'docker-compose -f docker-compose-shared.yml up -d'
+              sh 'docker-compose -f docker-compose-shared.yml up -d -p "temperaturelinebot_shared"''
               sh './gradlew composeUp snapshot'
             }
           }
