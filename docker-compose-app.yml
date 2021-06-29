@@ -8,7 +8,7 @@ services:
     image: ${IMAGE_NAME}-${PRODUCTION}
     container_name: "${CONTAINER_NAME}-${PRODUCTION}"
     ports:
-      - "443:8080"
+      - "${PUBLISHED_PORT}:8080"
     environment:
       - LINE_BOT_CHANNEL_TOKEN=${LINE_BOT_CHANNEL_TOKEN}
       - LINE_BOT_CHANNEL_SECRET=${LINE_BOT_CHANNEL_SECRET}
