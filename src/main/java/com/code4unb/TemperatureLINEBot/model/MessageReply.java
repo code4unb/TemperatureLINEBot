@@ -25,7 +25,7 @@ public class MessageReply extends Reply<MessageContent>{
         super(timestamp,source,message);
         phrases = message.getText().split(" ");;
         keyPhrase = phrases[0];
-        args = phrases.length>1 ? (Arrays.stream(phrases).skip(1).toArray(String[]::new)) : null ;;
+        args = phrases.length>1 ? (Arrays.stream(phrases).skip(1).toArray(String[]::new)) : new String[]{};
     }
 
     public static MessageReply Build(MessageEvent<TextMessageContent> event){
