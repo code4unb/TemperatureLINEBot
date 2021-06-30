@@ -1,4 +1,4 @@
-package com.code4unb.TemperatureLINEBot.db;
+package com.code4unb.TemperatureLINEBot.db.entity;
 
 import com.code4unb.TemperatureLINEBot.model.UserData;
 import com.code4unb.TemperatureLINEBot.model.UserData.Grades;
