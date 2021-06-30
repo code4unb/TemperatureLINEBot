@@ -4,7 +4,9 @@
 
 開発用LINEアカウント   
 　<a href="https://lin.ee/ZNs4VXX"><img src="https://scdn.line-apps.com/n/line_add_friends/btn/ja.png" alt="友だち追加" height="36" border="0"></a>
-## 使い方
+ 
+## [使い方](https://github.com/code4unb/TemperatureLINEBot/blob/document/documentation/USAGE.md#%E4%BD%BF%E3%81%84%E6%96%B9)
+
 ## 開発者向け情報
 ### 環境構築 スタンドアローン
 #### 環境
