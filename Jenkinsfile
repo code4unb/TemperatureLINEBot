@@ -39,7 +39,7 @@ pipeline {
             branch 'master'
           }
           steps {
-            sh '''./gradlew build snapshot
+            sh '''./gradlew build
 '''
             archiveArtifacts 'build/libs/*.jar'
           }
@@ -90,7 +90,7 @@ pipeline {
               sh 'export LINE_BOT_CHANNEL_TOKEN=$LINE_BOT_CHANNEL_TOKEN'
               sh 'export POSTGRES_PASSWORD=$POSTGRES_PASSWORD'
               sh 'docker-compose -f docker-compose-shared.yml -p "temperaturelinebot_shared" up -d'
-              sh './gradlew composeUp snapshot'
+              sh './gradlew composeUp'
             }
           }
         }
