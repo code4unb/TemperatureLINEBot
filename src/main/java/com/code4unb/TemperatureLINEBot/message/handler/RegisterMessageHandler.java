@@ -49,7 +49,7 @@ public class RegisterMessageHandler extends FlowMessageHandler {
                                 userDataRepository.save(new UserDataEntity(userData));
                             }
                             return FlowResult.builder()
-                                    .result(Optional.of(Collections.singletonList(TextMessage.builder().text(userData +" 登録しました。 間違いがある場合は '再登録' と送信してください。").build())))
+                                    .result(Optional.of(Collections.singletonList(TextMessage.builder().text(userData +" 登録しました。 間違いがある場合は 再度 '登録' と入力してください。").build())))
                                     .succeed(true)
                                     .build();
                         }else{
