@@ -34,7 +34,7 @@
         "action": {
           "type": "uri",
           "label": "使い方",
-          "uri": "http://code4unb.tk"
+          "uri": "https://github.com/code4unb/TemperatureLINEBot/blob/master/documentation/USAGE.md#%E4%BD%BF%E3%81%84%E6%96%B9"
         }
       },
       {
@@ -52,7 +52,7 @@
         "action": {
           "type": "uri",
           "label": "プライバシーポリシー",
-          "uri": "http://code4unb.tk"
+          "uri": "https://github.com/code4unb/TemperatureLINEBot/"
         }
       },
       {
