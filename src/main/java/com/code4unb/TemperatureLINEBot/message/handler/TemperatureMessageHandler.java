@@ -1,7 +1,7 @@
 package com.code4unb.TemperatureLINEBot.message.handler;
 
-import com.code4unb.TemperatureLINEBot.db.UserDataEntity;
 import com.code4unb.TemperatureLINEBot.db.UserDataRepository;
+import com.code4unb.TemperatureLINEBot.db.entity.UserDataEntity;
 import com.code4unb.TemperatureLINEBot.message.*;
 import com.code4unb.TemperatureLINEBot.model.MeasurementData;
 import com.code4unb.TemperatureLINEBot.model.MessageReply;
@@ -16,6 +16,7 @@ import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.model.message.TextMessage;
 import com.linecorp.bot.model.message.quickreply.QuickReply;
 import com.linecorp.bot.model.message.quickreply.QuickReplyItem;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -26,6 +27,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Component
 public class TemperatureMessageHandler extends FlowMessageHandler {
     @Autowired
@@ -183,8 +185,10 @@ public class TemperatureMessageHandler extends FlowMessageHandler {
                             case "submit":
                                 int states = Forms.submit(user, ((MeasurementData) session.getData("measured_data")));
                                 if(states==200){
+                                    log.info(String.format("Submission successful"));
                                     return FlowResult.builder().succeed(true).result(Optional.of(Collections.singletonList(TextMessage.builder().text("検温を入力しました。").build()))).build();
                                 }else{
+                                    log.error(String.format("Failed to submit measurement data:[response=%d,query=%s]",states,Forms.getEditableFormUri(user,data).toString()));
                                     return FlowResult.builder().succeed(true).result(Optional.of(Arrays.asList(TextMessage.builder().text("検温の入力に失敗しました。").build(),TextMessage.builder().text(Forms.getEditableFormUri(user,data).toString()).build()))).build();
                                 }
                             case "edit":

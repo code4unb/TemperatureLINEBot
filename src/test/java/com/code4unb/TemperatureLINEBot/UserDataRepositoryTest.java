@@ -1,13 +1,9 @@
 package com.code4unb.TemperatureLINEBot;
 
-import com.code4unb.TemperatureLINEBot.db.UserDataEntity;
 import com.code4unb.TemperatureLINEBot.db.UserDataRepository;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
-
-import java.util.Optional;
 
 @DataJdbcTest
 public class UserDataRepositoryTest {
