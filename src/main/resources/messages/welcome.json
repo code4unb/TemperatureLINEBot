@@ -1,0 +1,75 @@
+{
+  "type": "bubble",
+  "body": {
+    "type": "box",
+    "layout": "vertical",
+    "contents": [
+      {
+        "type": "text",
+        "text": "Welcome",
+        "weight": "bold",
+        "size": "xl",
+        "align": "start"
+      },
+      {
+        "type": "text",
+        "text": "友達追加ありがとうございます。\n当アカウントではGoogle Formsへの検温データの入力を簡単に行うことができます。\n使い方は以下のリンクからご覧ください。まずはユーザー登録を行います。",
+        "margin": "md",
+        "wrap": true
+      }
+    ]
+  },
+  "footer": {
+    "type": "box",
+    "layout": "vertical",
+    "spacing": "sm",
+    "contents": [
+      {
+        "type": "separator"
+      },
+      {
+        "type": "button",
+        "style": "link",
+        "height": "sm",
+        "action": {
+          "type": "uri",
+          "label": "使い方",
+          "uri": "http://code4unb.tk"
+        }
+      },
+      {
+        "type": "button",
+        "action": {
+          "type": "message",
+          "label": "ユーザー登録",
+          "text": "登録"
+        }
+      },
+      {
+        "type": "button",
+        "style": "link",
+        "height": "sm",
+        "action": {
+          "type": "uri",
+          "label": "プライバシーポリシー",
+          "uri": "http://code4unb.tk"
+        }
+      },
+      {
+        "type": "separator"
+      },
+      {
+        "type": "text",
+        "text": "©2021, code4unb ",
+        "size": "sm",
+        "color": "#aaaaaa",
+        "align": "end"
+      },
+      {
+        "type": "spacer",
+        "size": "sm"
+      }
+    ],
+    "flex": 0
+  }
+}

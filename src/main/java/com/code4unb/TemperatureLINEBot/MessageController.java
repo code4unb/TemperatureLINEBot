@@ -3,20 +3,21 @@ package com.code4unb.TemperatureLINEBot;
 import com.code4unb.TemperatureLINEBot.message.*;
 import com.code4unb.TemperatureLINEBot.model.MessageReply;
 import com.code4unb.TemperatureLINEBot.model.PostbackReply;
+import com.code4unb.TemperatureLINEBot.util.FlexMessages;
+import com.linecorp.bot.model.event.FollowEvent;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.PostbackEvent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
+import com.linecorp.bot.model.message.FlexMessage;
 import com.linecorp.bot.model.message.Message;
+import com.linecorp.bot.model.message.TextMessage;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Slf4j
 @LineMessageHandler
@@ -64,5 +65,12 @@ public class MessageController {
             }
         }
         return null;
+    }
+
+    @EventMapping
+    public List<Message> followEvent(FollowEvent event){
+        return Arrays.asList(
+                FlexMessage.builder().altText("welcome").contents(FlexMessages.LoadContainerFromJsonFile("welcome")).build()
+        );
     }
 }
