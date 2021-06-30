@@ -48,6 +48,8 @@ public abstract class FlowMessageHandler extends MessageHandlerBase{
             newSession.addData(ID_HANDLER_TYPE, applicationContext.getBeanNamesForType(this.getClass())[0]);
             sessionManager.addSession(currentUserId, newSession);
 
+            log.info(String.format("%s execute command:%s",message.getSource().getUserId(),message.getContent().toString()));
+
             List<Message> result = new ArrayList<>();
             List<Message> handleResult = handleActivateMessage(message);
             if (handleResult != null) {
@@ -76,6 +78,8 @@ public abstract class FlowMessageHandler extends MessageHandlerBase{
                 if (((MessageFlow) session.getData(ID_MESSAGE_FLOW)).isCompleted()) {
                     sessionManager.removeSession(currentUserId);
                 }
+
+                log.info(String.format("%s execute child command:%s",message.getSource().getUserId(),message.getContent().toString()));
 
                 return result;
             }

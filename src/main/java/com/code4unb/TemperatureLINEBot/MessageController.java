@@ -4,13 +4,13 @@ import com.code4unb.TemperatureLINEBot.message.*;
 import com.code4unb.TemperatureLINEBot.model.MessageReply;
 import com.code4unb.TemperatureLINEBot.model.PostbackReply;
 import com.code4unb.TemperatureLINEBot.util.FlexMessages;
+import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.FollowEvent;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.PostbackEvent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
 import com.linecorp.bot.model.message.FlexMessage;
 import com.linecorp.bot.model.message.Message;
-import com.linecorp.bot.model.message.TextMessage;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +35,6 @@ public class MessageController {
     @EventMapping
     public List<Message> handleTextMessageEvent(MessageEvent<TextMessageContent> event){
         MessageReply message = MessageReply.Build(event);
-        log.info("Message received :"+message.getKeyPhrase());
 
         Optional<Session> session = sessionManager.findSession(message.getSource().getUserId());
 
@@ -54,7 +53,7 @@ public class MessageController {
     @EventMapping
     public List<Message> handlePostBackEvent(PostbackEvent event){
         PostbackReply reply = PostbackReply.Build(event);
-        log.info("Postback received :"+reply.getData());
+        log.info(String.format("Postback received '%s' from '%s'",reply.getData(),reply.getSource().getUserId()));
 
         Optional<Session> session = sessionManager.findSession(reply.getSource().getUserId());
 
@@ -69,8 +68,14 @@ public class MessageController {
 
     @EventMapping
     public List<Message> followEvent(FollowEvent event){
+        log.info(String.format("New follower '%s'",event.getSource().getUserId()));
         return Arrays.asList(
                 FlexMessage.builder().altText("welcome").contents(FlexMessages.LoadContainerFromJsonFile("welcome")).build()
         );
+    }
+
+    @EventMapping
+    public void handleDefaultEvent(Event event){
+        return;
     }
 }

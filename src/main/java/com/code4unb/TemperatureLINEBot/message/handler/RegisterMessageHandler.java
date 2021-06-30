@@ -12,6 +12,7 @@ import com.linecorp.bot.model.event.source.Source;
 import com.linecorp.bot.model.message.FlexMessage;
 import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.model.message.TextMessage;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +20,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Component
 public class RegisterMessageHandler extends FlowMessageHandler {
     @Autowired
@@ -48,6 +50,7 @@ public class RegisterMessageHandler extends FlowMessageHandler {
                             }else{
                                 userDataRepository.save(new UserDataEntity(userData));
                             }
+                            log.info(String.format("Added new user %s-%d-%d",userData.getGrade().toString(),userData.getClass_(),userData.getNumber()));
                             return FlowResult.builder()
                                     .result(Optional.of(Collections.singletonList(TextMessage.builder().text(userData +" 登録しました。 間違いがある場合は 再度 '登録' と入力してください。").build())))
                                     .succeed(true)
