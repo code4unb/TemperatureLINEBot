@@ -17,7 +17,7 @@ public class UserDataEntity {
     @Column("id")
     @Id
     @With
-    private final String id;
+    private final int id;
 
     //Encrypt
     @Column("line_id")
@@ -41,7 +41,7 @@ public class UserDataEntity {
     private final String lastName;
 
     @PersistenceConstructor
-    public UserDataEntity(String id,String lineId,Grades grade,int class_,int number,String firstName,String lastName){
+    public UserDataEntity(int id,String lineId,Grades grade,int class_,int number,String firstName,String lastName){
         this.id = id;
         this.lineId = lineId;
         this.grade = grade;
@@ -50,11 +50,11 @@ public class UserDataEntity {
         this.firstName = firstName;
         this.lastName = lastName;
     }
-    public UserDataEntity(String id,UserData data){
+    public UserDataEntity(int id,UserData data){
         this(id,data.getLineID(),data.getGrade(),data.getClass_(),data.getNumber(),data.getFirstName(),data.getLastName());
     }
     public UserDataEntity(UserData data){
-        this(null,data);
+        this(0,data);
     }
     public UserData toUserData(){
         return new UserData(getLineId(),getGrade(),getClass_(),getNumber(),getFirstName(),getLastName());
