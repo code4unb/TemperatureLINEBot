@@ -1,0 +1,45 @@
+{
+  "form_id": "1FAIpQLSdj2X4LWjJQW13kSOU6BUbNy7xiS3fllzYdx8nDfzY_PVYjFg",
+  "mappings": [
+    {
+      "input_id": "587031667",
+      "name":  "日時",
+      "value": "%date"
+    },
+    {
+      "input_id": "1257939069",
+      "name":  "AM/PM",
+      "value": "%time_convention"
+    },
+    {
+      "input_id": "2089576829",
+      "name":  "出席番号",
+      "value": "%number"
+    },
+    {
+      "input_id": "1257939069",
+      "name":  "名前",
+      "value": "%name"
+    },
+    {
+      "input_id": "1311656999",
+      "name":  "体温",
+      "value": "%temperature"
+    },
+    {
+      "input_id": "1325372544",
+      "name":  "症状等",
+      "value": "該当なし（健康である）"
+    },
+    {
+      "input_id": "1951780967",
+      "name":  "行動歴",
+      "value": "該当なし"
+    },
+    {
+      "input_id": "1809901450",
+      "name":  "PCR検査",
+      "value": "該当なし"
+    }
+  ]
+}
