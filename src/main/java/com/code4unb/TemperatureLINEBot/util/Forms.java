@@ -18,7 +18,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Forms {
-    public static final String REQUEST_URL = "https://docs.google.com/forms/d/e/%s/";
+    public static final String REQUEST_URL = "https://docs.google.com/forms/d/%s/";
 
     public static int submit(UserData user, MeasurementData data){
         Optional<InputMapping> optionalMapping =  InputMapping.getInstance(user.getClassRoom());
