@@ -1,0 +1,40 @@
+{
+  "form_id": "1I2XUpbMTRokTO_AGT_5cqXJoMgQPP_Mzb9uoZn0HhSc",
+  "mappings": [
+    {
+      "input_id": "",
+      "name": "日付",
+      "value": "%date"
+    },
+    {
+      "input_id": "",
+      "name": "出席番号",
+      "value": "%number"
+    },
+    {
+      "input_id": "",
+      "name": "氏名",
+      "value": "%name"
+    },
+    {
+      "input_id": "",
+      "name": "体温",
+      "value": "%temperature"
+    },
+    {
+      "input_id": "",
+      "name": "症状等",
+      "value": "該当なし（健康である）"
+    },
+    {
+      "input_id": "",
+      "name": "行動歴",
+      "value": "該当なし"
+    },
+    {
+      "input_id": "",
+      "name": "ＰＣＲ検査",
+      "value": "該当なし"
+    }
+  ]
+}
