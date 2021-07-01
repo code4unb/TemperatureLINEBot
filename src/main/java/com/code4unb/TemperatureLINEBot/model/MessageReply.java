@@ -23,7 +23,7 @@ public class MessageReply extends Reply<MessageContent>{
 
     public MessageReply(Instant timestamp, Source source, TextMessageContent message){
         super(timestamp,source,message);
-        phrases = message.getText().split(" ");;
+        phrases = message.getText().replace("　"," ").split(" ");;
         keyPhrase = phrases[0];
         args = phrases.length>1 ? (Arrays.stream(phrases).skip(1).toArray(String[]::new)) : new String[]{};
     }
