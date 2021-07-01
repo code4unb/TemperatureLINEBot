@@ -7,11 +7,6 @@
       "value": "%date"
     },
     {
-      "input_id": "1257939069",
-      "name":  "AM/PM",
-      "value": "%time_convention"
-    },
-    {
       "input_id": "2089576829",
       "name":  "出席番号",
       "value": "%number"
