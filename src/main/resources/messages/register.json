@@ -34,13 +34,21 @@
       {
         "type": "text",
         "contents": [],
-        "text": "３年１組８番 畝傍太郎さんの場合 ＞",
+        "text": "３年１組1８番 畝傍太郎さんの場合 ＞",
         "margin": "5px",
         "size": "14px"
       },
       {
         "type": "text",
-        "text": "例) 3 1 8 畝傍 太郎",
+        "text": "例) 3 1 18 畝傍 太郎",
+        "size": "15px",
+        "offsetStart": "10px",
+        "margin": "5px"
+      },
+      {
+        "type": "text",
+        "text": "注意:半角スペースで区切ってください。",
+        "wrap": true,
         "size": "15px",
         "offsetStart": "10px",
         "margin": "5px"
