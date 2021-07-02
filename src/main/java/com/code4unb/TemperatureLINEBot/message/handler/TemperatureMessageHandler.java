@@ -9,11 +9,14 @@ import com.code4unb.TemperatureLINEBot.model.PostbackReply;
 import com.code4unb.TemperatureLINEBot.model.UserData;
 import com.code4unb.TemperatureLINEBot.util.FlexMessages;
 import com.code4unb.TemperatureLINEBot.util.Forms;
+import com.code4unb.TemperatureLINEBot.util.InputMapping;
 import com.linecorp.bot.model.action.DatetimePickerAction;
 import com.linecorp.bot.model.action.MessageAction;
 import com.linecorp.bot.model.event.source.Source;
+import com.linecorp.bot.model.message.FlexMessage;
 import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.model.message.TextMessage;
+import com.linecorp.bot.model.message.flex.container.FlexContainer;
 import com.linecorp.bot.model.message.quickreply.QuickReply;
 import com.linecorp.bot.model.message.quickreply.QuickReplyItem;
 import lombok.extern.slf4j.Slf4j;
@@ -203,7 +206,13 @@ public class TemperatureMessageHandler extends FlowMessageHandler {
                         Session session = sessionManager.findOrCreateSession(source.getUserId());
                         MeasurementData data = (MeasurementData) session.getData("measured_data");
                         UserData user = userDataRepository.findByLineID(source.getUserId()).get().toUserData();
-                        return Optional.of(Collections.singletonList(FlexMessages.CreateConfirmSubmitMessage(user,data)));
+                        if(InputMapping.getInstance(user.getClassRoom()).get().isOauthRequired()){
+                            FlexContainer container = FlexMessages.LoadContainerFromJson(FlexMessages.LoadJsonFromJsonFile("oauth-required.json").replace("%uri",Forms.getEditableFormUri(user,data).toString()));
+                            sessionManager.removeSession(source.getUserId());
+                            return Optional.of(Collections.singletonList(FlexMessage.builder().altText("URL").contents(container).build()));
+                        }else{
+                            return Optional.of(Collections.singletonList(FlexMessages.CreateConfirmSubmitMessage(user,data)));
+                        }
                     }
 
                     @Override
