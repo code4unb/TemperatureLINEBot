@@ -13,6 +13,7 @@ import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashSet;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -61,7 +62,7 @@ public class Forms {
                 x.name,
                 x.value
                         .replace("%date",data.getDate().toString())
-                        .replace("%time_convention",data.getConvention()==MeasurementData.TimeConvention.AM?"午前9:00":"午後16:00")
+                        .replace("%time_convention", Objects.toString((data.getConvention() == MeasurementData.TimeConvention.AM ? x.getChoices().get("am") : x.getChoices().get("pm"))))
                         .replace("%number",String.valueOf(user.getNumber()))
                         .replace("%name",user.getName())
                         .replace("%temperature",data.getTemperature())

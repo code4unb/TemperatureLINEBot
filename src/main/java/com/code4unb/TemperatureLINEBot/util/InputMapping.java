@@ -27,6 +27,9 @@ public class InputMapping {
     @JsonProperty("form_id")
     private String formId;
 
+    @JsonProperty("oauth")
+    private boolean oauthRequired = false;
+
     @JsonProperty("mappings")
     @JsonDeserialize(as=LinkedHashSet.class)
     private LinkedHashSet<MappingItem> mappingItems;
@@ -117,7 +120,6 @@ public class InputMapping {
                 result.append(str);
                 str = br.readLine();
             }
-
             ObjectMapper mapper = new ObjectMapper();
 
             return mapper.readValue(result.toString(), InputMapping.class);
@@ -140,5 +142,8 @@ public class InputMapping {
 
         @JsonProperty("value")
         String value;
+
+        @JsonProperty("choices")
+        Map<String,Object> choices = new HashMap<>();
     }
 }
