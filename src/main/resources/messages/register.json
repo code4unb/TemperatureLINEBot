@@ -22,7 +22,7 @@
     "contents": [
       {
         "type": "text",
-        "text": "学年・クラス・番号・氏名を入力してください。\n注意:学年クラス番号氏名の間は半角スペースで区切ってください。",
+        "text": "学年・クラス・番号・氏名を入力してください。",
         "maxLines": 2,
         "wrap": true,
         "contents": []
@@ -34,13 +34,20 @@
       {
         "type": "text",
         "contents": [],
-        "text": "３年１組８番 畝傍太郎さんの場合 ＞",
+        "text": "３年１組1８番 畝傍太郎さんの場合 ＞",
         "margin": "5px",
         "size": "14px"
       },
       {
         "type": "text",
-        "text": "例) 3 1 8 畝傍 太郎",
+        "text": "例) 3 1 18 畝傍 太郎",
+        "size": "15px",
+        "offsetStart": "10px",
+        "margin": "5px"
+      },
+      {
+        "type": "text",
+        "text": "注意:学年組番号氏名は半角スペースで区切ってください。",
         "size": "15px",
         "offsetStart": "10px",
         "margin": "5px"
