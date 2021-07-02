@@ -3,37 +3,37 @@
   "mappings": [
     {
       "input_id": "587031667",
-      "name":  "日時",
+      "name": "日付",
       "value": "%date"
     },
     {
-      "input_id": "1078510918",
-      "name":  "出席番号",
-      "value": "%number"
-    },
-    {
       "input_id": "1257939069",
-      "name":  "名前",
+      "name": "氏名",
       "value": "%name"
     },
     {
-      "input_id": "631919205",
-      "name":  "体温",
+      "input_id": "1311656999",
+      "name": "体温",
       "value": "%temperature"
     },
     {
-      "input_id": "568833490",
-      "name":  "症状等",
+      "input_id": "1325372544",
+      "name": "症状等（複数回答可）",
       "value": "該当なし（健康である）"
     },
     {
-      "input_id": "415859196",
-      "name":  "行動歴",
+      "input_id": "1951780967",
+      "name": "行動歴（複数回答可）",
       "value": "該当なし"
     },
     {
-      "input_id": "815649948",
-      "name":  "PCR検査",
+      "input_id": "2089576829",
+      "name": "出席番号",
+      "value": "%number"
+    },
+    {
+      "input_id": "1809901450",
+      "name": "ＰＣＲ検査について",
       "value": "該当なし"
     }
   ]
