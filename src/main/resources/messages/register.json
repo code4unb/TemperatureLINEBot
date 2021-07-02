@@ -48,6 +48,7 @@
       {
         "type": "text",
         "text": "注意:半角スペースで区切ってください。",
+        "wrap": true,
         "size": "15px",
         "offsetStart": "10px",
         "margin": "5px"
