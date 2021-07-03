@@ -220,7 +220,7 @@ public class TemperatureMessageHandler extends FlowMessageHandler {
 
                     @Override
                     public FlowResult handle(MessageReply message) {
-                        return null;
+                        return FlowResult.builder().succeed(false).build();
                     }
                 }
         );
