@@ -15,6 +15,7 @@ import com.linecorp.bot.model.message.FlexMessage;
 import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.model.message.TextMessage;
 import com.linecorp.bot.model.message.flex.container.FlexContainer;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -26,6 +27,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Component
 public class SimpleTemperatureMessageHandler extends FlowMessageHandler {
     @Autowired
@@ -55,8 +57,10 @@ public class SimpleTemperatureMessageHandler extends FlowMessageHandler {
                         case "submit":
                             int states = Forms.submit(user, ((MeasurementData) session.getData("measured_data")));
                             if(states==200){
+                                log.info("Submission successful");
                                 return FlowResult.builder().succeed(true).result(Collections.singletonList(TextMessage.builder().text("検温を入力しました。").build())).build();
                             }else{
+                                log.error(String.format("Failed to submit measurement data:[response=%d,query=%s]",states,Forms.getEditableFormUri(user,data).toString()));
                                 return FlowResult.builder().succeed(true).result(Arrays.asList(TextMessage.builder().text("検温の入力に失敗しました。").build(),TextMessage.builder().text(Forms.getEditableFormUri(user,data).toString()).build())).build();
                             }
                         case "edit":
