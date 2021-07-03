@@ -16,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -73,11 +72,10 @@ public class RegisterMessageHandler extends FlowMessageHandler {
 
     private UserData tryParse(String lineID,String[] args){
         if(args.length <5) return null;
-        args = Arrays.stream(args).map(x->x.replace("年","").replace("組","").replace("番","")).toArray(String[]::new);
         try{
-            UserData.Grades grade = UserData.Grades.values()[ Integer.parseInt(args[0])-1];
-            int class_ = Integer.parseInt(args[1]);
-            int number = Integer.parseInt(args[2]);
+            UserData.Grades grade = UserData.Grades.values()[ Integer.parseInt(args[0].replace("年","").replace("組","").replace("番",""))-1];
+            int class_ = Integer.parseInt(args[1].replace("年","").replace("組","").replace("番",""));
+            int number = Integer.parseInt(args[2].replace("年","").replace("組","").replace("番",""));
             String firstName = args[4];
             String lastName = args[3];
             return new UserData(lineID,grade,class_,number,firstName,lastName);
