@@ -1,0 +1,16 @@
+{
+  "form_id": "e/1FAIpQLSd8v456utqwjL4zC9vZKMCUze5XuPG8IOv4WdPXA5xnn0Th2Q",
+  "oauth": true,
+  "mappings": [
+    {
+      "input_id": "439213312",
+      "name":  "氏名",
+      "value": "%name"
+    },
+    {
+      "input_id": "1503278953",
+      "name":  "日時",
+      "value": "%date"
+    }
+  ]
+}
