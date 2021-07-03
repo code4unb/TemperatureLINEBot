@@ -99,11 +99,10 @@ public class TemperatureMessageHandler extends FlowMessageHandler {
                                 sessionManager.addSession(reply.getSource().getUserId(), session);
 
                                 Optional<UserDataEntity> optional = userDataRepository.findByLineID(reply.getSource().getUserId());
-                                if (!optional.isPresent()) {
+                                if (optional.isEmpty()) {
                                     sessionManager.removeSession(reply.getSource().getUserId());
                                     return FlowResult.builder().singletonResult(TextMessage.builder().text("ユーザー登録がされていません。'登録'と入力して登録手続きを行ってください。").build()).succeed(false).build();
                                 }
-                                UserData data = optional.get().toUserData();
 
                                 return FlowResult.EMPTY_SUCCEED;
                         }
@@ -182,6 +181,7 @@ public class TemperatureMessageHandler extends FlowMessageHandler {
                     }
                 },
                 new PostBackFlow() {
+                    @SuppressWarnings("OptionalGetWithoutIsPresent")
                     @Override
                     public FlowResult handlePostback(PostbackReply reply) {
                         Session session = sessionManager.findOrCreateSession(reply.getSource().getUserId());
@@ -191,7 +191,7 @@ public class TemperatureMessageHandler extends FlowMessageHandler {
                             case "submit":
                                 int states = Forms.submit(user, ((MeasurementData) session.getData("measured_data")));
                                 if(states==200){
-                                    log.info(String.format("Submission successful"));
+                                    log.info("Submission successful");
                                     return FlowResult.builder().succeed(true).singletonResult(TextMessage.builder().text("検温を入力しました。").build()).build();
                                 }else{
                                     log.error(String.format("Failed to submit measurement data:[response=%d,query=%s]",states,Forms.getEditableFormUri(user,data).toString()));
@@ -204,6 +204,7 @@ public class TemperatureMessageHandler extends FlowMessageHandler {
                         }
                     }
 
+                    @SuppressWarnings("OptionalGetWithoutIsPresent")
                     @Override
                     public Optional<List<Message>> postHandle(Source source) {
                         Session session = sessionManager.findOrCreateSession(source.getUserId());
@@ -232,7 +233,7 @@ public class TemperatureMessageHandler extends FlowMessageHandler {
     @Override
     protected List<Message> handleActivateMessage(MessageReply message) {
         Optional<UserDataEntity> optional =  userDataRepository.findByLineID(message.getSource().getUserId());
-        if(!optional.isPresent()){
+        if(optional.isEmpty()){
             sessionManager.removeSession(message.getSource().getUserId());
             return Collections.singletonList(TextMessage.builder().text("ユーザー登録がされていません。'登録'と入力して登録手続きを行ってください。").build());
         }
