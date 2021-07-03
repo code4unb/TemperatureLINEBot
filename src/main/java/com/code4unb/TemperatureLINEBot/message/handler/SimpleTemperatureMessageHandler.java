@@ -85,7 +85,7 @@ public class SimpleTemperatureMessageHandler extends FlowMessageHandler {
 
                 @Override
                 public FlowResult handle(MessageReply message) {
-                    return null;
+                    return FlowResult.EMPTY_FAILED;
                 }
             }
         );
