@@ -9,9 +9,12 @@ import com.code4unb.TemperatureLINEBot.model.PostbackReply;
 import com.code4unb.TemperatureLINEBot.model.UserData;
 import com.code4unb.TemperatureLINEBot.util.FlexMessages;
 import com.code4unb.TemperatureLINEBot.util.Forms;
+import com.code4unb.TemperatureLINEBot.util.InputMapping;
 import com.linecorp.bot.model.event.source.Source;
+import com.linecorp.bot.model.message.FlexMessage;
 import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.model.message.TextMessage;
+import com.linecorp.bot.model.message.flex.container.FlexContainer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -78,7 +81,6 @@ public class SimpleTemperatureMessageHandler extends FlowMessageHandler {
                     }else{
                         return Optional.of(Collections.singletonList(FlexMessages.CreateConfirmSubmitMessage(user,data)));
                     }
-                    return Optional.of(Collections.singletonList(FlexMessages.CreateConfirmSubmitMessage(user,data)));
                 }
 
                 @Override
