@@ -48,8 +48,6 @@ public abstract class FlowMessageHandler extends MessageHandlerBase{
             newSession.addData(ID_HANDLER_TYPE, applicationContext.getBeanNamesForType(this.getClass())[0]);
             sessionManager.addSession(currentUserId, newSession);
 
-            log.info(String.format("%s execute command:%s",message.getSource().getUserId(),message.getContent().toString()));
-
             List<Message> result = new ArrayList<>();
             List<Message> handleResult = handleActivateMessage(message);
             if (handleResult != null) {
