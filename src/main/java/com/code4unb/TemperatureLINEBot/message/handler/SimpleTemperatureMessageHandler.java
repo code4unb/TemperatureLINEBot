@@ -55,14 +55,14 @@ public class SimpleTemperatureMessageHandler extends FlowMessageHandler {
                         case "submit":
                             int states = Forms.submit(user, ((MeasurementData) session.getData("measured_data")));
                             if(states==200){
-                                return FlowResult.builder().succeed(true).result(Optional.of(Collections.singletonList(TextMessage.builder().text("検温を入力しました。").build()))).build();
+                                return FlowResult.builder().succeed(true).singletonResult(TextMessage.builder().text("検温を入力しました。").build()).build();
                             }else{
-                                return FlowResult.builder().succeed(true).result(Optional.of(Arrays.asList(TextMessage.builder().text("検温の入力に失敗しました。").build(),TextMessage.builder().text(Forms.getEditableFormUri(user,data).toString()).build()))).build();
+                                return FlowResult.builder().succeed(true).result(Arrays.asList(TextMessage.builder().text("検温の入力に失敗しました。").build(),TextMessage.builder().text(Forms.getEditableFormUri(user,data).toString()).build())).build();
                             }
                         case "edit":
-                            return FlowResult.builder().succeed(true).result(Optional.of(Arrays.asList(TextMessage.builder().text("次のリンクから修正を行ってください。").build(),TextMessage.builder().text(Forms.getEditableFormUri(user,data).toString()).build()))).build();
+                            return FlowResult.builder().succeed(true).result(Arrays.asList(TextMessage.builder().text("次のリンクから修正を行ってください。").build(),TextMessage.builder().text(Forms.getEditableFormUri(user,data).toString()).build())).build();
                         default:
-                            return FlowResult.builder().succeed(false).result(Optional.of(Collections.singletonList(TextMessage.builder().text("不正な操作が行われました。").build()))).build();
+                            return FlowResult.builder().succeed(false).singletonResult(TextMessage.builder().text("不正な操作が行われました。").build()).build();
                     }
                 }
 
@@ -85,7 +85,7 @@ public class SimpleTemperatureMessageHandler extends FlowMessageHandler {
 
                 @Override
                 public FlowResult handle(MessageReply message) {
-                    return null;
+                    return FlowResult.EMPTY_FAILED;
                 }
             }
         );

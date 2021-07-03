@@ -57,9 +57,9 @@ public class TemperatureMessageHandler extends FlowMessageHandler {
                             Session session = sessionManager.findOrCreateSession(message.getSource().getUserId());
                             session.addData("measured_data", new MeasurementData(String.format("%.1f", parsed.get()), LocalDate.now(), MeasurementData.TimeConvention.Now()));
                             sessionManager.addSession(message.getSource().getUserId(), session);
-                            return new FlowResult(Optional.empty(), true);
+                            return FlowResult.EMPTY_SUCCEED;
                         } else {
-                            return new FlowResult(Optional.of(Collections.singletonList(TextMessage.builder().text("不正な入力値 " + message.getKeyPhrase() + " です。体温は33℃から43℃の範囲内で入力してください。").build())), false);
+                            return FlowResult.builder().singletonResult(TextMessage.builder().text("不正な入力値 " + message.getKeyPhrase() + " です。体温は33℃から43℃の範囲内で入力してください。").build()).succeed(false).build();
                         }
                     }
                 },
@@ -81,9 +81,9 @@ public class TemperatureMessageHandler extends FlowMessageHandler {
                             Session session = sessionManager.findOrCreateSession(message.getSource().getUserId());
                             session.addData("measured_data", ((MeasurementData) session.getData("measured_data")).withConvention(result.get()));
                             sessionManager.addSession(message.getSource().getUserId(), session);
-                            return new FlowResult(Optional.empty(), true);
+                            return FlowResult.EMPTY_SUCCEED;
                         } else {
-                            return new FlowResult(Optional.of(Collections.singletonList(TextMessage.builder().text("不正な入力値 " + message.getKeyPhrase() + " です。もう一度入力してください。").build())), false);
+                            return FlowResult.builder().singletonResult(TextMessage.builder().text("不正な入力値 " + message.getKeyPhrase() + " です。もう一度入力してください。").build()).succeed(false).build();
                         }
                     }
                 },
@@ -101,13 +101,13 @@ public class TemperatureMessageHandler extends FlowMessageHandler {
                                 Optional<UserDataEntity> optional = userDataRepository.findByLineID(reply.getSource().getUserId());
                                 if (!optional.isPresent()) {
                                     sessionManager.removeSession(reply.getSource().getUserId());
-                                    return new FlowResult(Optional.of(Collections.singletonList(TextMessage.builder().text("ユーザー登録がされていません。'登録'と入力して登録手続きを行ってください。").build())), false);
+                                    return FlowResult.builder().singletonResult(TextMessage.builder().text("ユーザー登録がされていません。'登録'と入力して登録手続きを行ってください。").build()).succeed(false).build();
                                 }
                                 UserData data = optional.get().toUserData();
 
-                                return new FlowResult(Optional.empty(), true);
+                                return FlowResult.EMPTY_SUCCEED;
                         }
-                        return new FlowResult(Optional.of(Collections.singletonList(TextMessage.builder().text("エラーが発生しました。").build())), false);
+                        return FlowResult.builder().singletonResult(TextMessage.builder().text("エラーが発生しました。").build()).succeed(false).build();
                     }
 
                     @Override
@@ -172,9 +172,12 @@ public class TemperatureMessageHandler extends FlowMessageHandler {
                             Session session = sessionManager.findOrCreateSession(message.getSource().getUserId());
                             session.addData("measured_data", ((MeasurementData) session.getData("measured_data")).withDate(date));
                             sessionManager.addSession(message.getSource().getUserId(), session);
-                            return new FlowResult(Optional.empty(), true);
+                            return FlowResult.EMPTY_SUCCEED;
                         } catch (Exception e) {
-                            return new FlowResult(Optional.of(Collections.singletonList(TextMessage.builder().text("不正な入力値 " + message.getKeyPhrase() + " です。もう一度入力してください。").build())), false);
+                            return FlowResult.builder()
+                                    .succeed(false)
+                                    .singletonResult(TextMessage.builder().text("不正な入力値 " + message.getKeyPhrase() + " です。もう一度入力してください。").build())
+                                    .build();
                         }
                     }
                 },
@@ -189,15 +192,15 @@ public class TemperatureMessageHandler extends FlowMessageHandler {
                                 int states = Forms.submit(user, ((MeasurementData) session.getData("measured_data")));
                                 if(states==200){
                                     log.info(String.format("Submission successful"));
-                                    return FlowResult.builder().succeed(true).result(Optional.of(Collections.singletonList(TextMessage.builder().text("検温を入力しました。").build()))).build();
+                                    return FlowResult.builder().succeed(true).singletonResult(TextMessage.builder().text("検温を入力しました。").build()).build();
                                 }else{
                                     log.error(String.format("Failed to submit measurement data:[response=%d,query=%s]",states,Forms.getEditableFormUri(user,data).toString()));
-                                    return FlowResult.builder().succeed(true).result(Optional.of(Arrays.asList(TextMessage.builder().text("検温の入力に失敗しました。").build(),TextMessage.builder().text(Forms.getEditableFormUri(user,data).toString()).build()))).build();
+                                    return FlowResult.builder().succeed(true).result(Arrays.asList(TextMessage.builder().text("検温の入力に失敗しました。").build(),TextMessage.builder().text(Forms.getEditableFormUri(user,data).toString()).build())).build();
                                 }
                             case "edit":
-                                return FlowResult.builder().succeed(true).result(Optional.of(Arrays.asList(TextMessage.builder().text("次のリンクから修正を行ってください。").build(),TextMessage.builder().text(Forms.getEditableFormUri(user,data).toString()).build()))).build();
+                                return FlowResult.builder().succeed(true).result(Arrays.asList(TextMessage.builder().text("次のリンクから修正を行ってください。").build(),TextMessage.builder().text(Forms.getEditableFormUri(user,data).toString()).build())).build();
                             default:
-                                return FlowResult.builder().succeed(false).result(Optional.of(Collections.singletonList(TextMessage.builder().text("不正な操作が行われました。").build()))).build();
+                                return FlowResult.builder().succeed(false).singletonResult(TextMessage.builder().text("不正な操作が行われました。").build()).build();
                         }
                     }
 
@@ -220,7 +223,7 @@ public class TemperatureMessageHandler extends FlowMessageHandler {
 
                     @Override
                     public FlowResult handle(MessageReply message) {
-                        return FlowResult.builder().succeed(false).build();
+                        return FlowResult.EMPTY_FAILED;
                     }
                 }
         );
