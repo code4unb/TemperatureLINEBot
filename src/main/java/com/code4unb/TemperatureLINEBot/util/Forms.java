@@ -20,19 +20,17 @@ import java.util.stream.Collectors;
 
 public class Forms {
     public static final String REQUEST_URL = "https://docs.google.com/forms/d/%s/";
+    public static final String ACCOUNT_CHOOSER_URL = "https://accounts.google.com/AccountChooser/signinchooser?continue=%s&service=wise&flowName=GlifWebSignIn&flowEntry=AccountChooser";
 
     public static int submit(UserData user, MeasurementData data){
         Optional<InputMapping> optionalMapping =  InputMapping.getInstance(user.getClassRoom());
         if(!optionalMapping.isPresent())return -1;
         InputMapping mapping = optionalMapping.get();
 
-        String path = String.format(REQUEST_URL+"formResponse",mapping.getFormId());
-        String param = createParams(mapping,user,data).stream().map(x->String.format("entry.%s=%s",x.entry,URLEncoder.encode(x.value,StandardCharsets.UTF_8))).collect(Collectors.joining("&"));
-
         HttpClient client = HttpClient.newHttpClient();
 
         try {
-            URL url = URI.create(path +"?"+param).toURL();
+            URL url = getSubmitFormUri(user,data).toURL();
             HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             connection.connect();
@@ -47,13 +45,46 @@ public class Forms {
     }
 
     public static URI getEditableFormUri(UserData user,MeasurementData data){
+        return getEditableFormUri(user,data,false);
+    }
+    public static URI getEditableFormUri(UserData user,MeasurementData data,boolean openExternalBrowser){
         Optional<InputMapping> optionalMapping =  InputMapping.getInstance(user.getClassRoom());
         if(!optionalMapping.isPresent())return null;
         InputMapping mapping = optionalMapping.get();
         String path = String.format(REQUEST_URL+"viewform",mapping.getFormId());
         String param = createParams(mapping,user,data).stream().map(x->String.format("entry.%s=%s",x.entry,URLEncoder.encode(x.value,StandardCharsets.UTF_8))).collect(Collectors.joining("&"));
+        if(openExternalBrowser){
+            param += "&openExternalBrowser=1";
+        }
 
         return URI.create(path +"?"+param);
+    }
+
+    public static URI getSubmitFormUri(UserData user,MeasurementData data){
+        return getSubmitFormUri(user,data,false);
+    }
+    public static URI getSubmitFormUri(UserData user,MeasurementData data,boolean openExternalBrowser){
+        Optional<InputMapping> optionalMapping =  InputMapping.getInstance(user.getClassRoom());
+        if(!optionalMapping.isPresent())return null;
+        InputMapping mapping = optionalMapping.get();
+        String path = String.format(REQUEST_URL+"formResponse",mapping.getFormId());
+        String param = createParams(mapping,user,data).stream().map(x->String.format("entry.%s=%s",x.entry,URLEncoder.encode(x.value,StandardCharsets.UTF_8))).collect(Collectors.joining("&"));
+        if(openExternalBrowser){
+            param += "&openExternalBrowser=1";
+        }
+
+        return URI.create(path +"?"+param);
+    }
+
+    public static URI getAccountChooserURi(UserData user,MeasurementData data){
+        return getAccountChooserUri(user,data,false);
+    }
+    public static URI getAccountChooserUri(UserData user,MeasurementData data,boolean openExternalBrowser){
+        String uri = String.format(ACCOUNT_CHOOSER_URL, URLEncoder.encode(getSubmitFormUri(user,data).toString(),StandardCharsets.UTF_8));
+        if(openExternalBrowser){
+            uri += "&openExternalBrowser=1";
+        }
+        return URI.create(uri);
     }
 
     public static Set<FormsParam> createParams(InputMapping mapping, UserData user, MeasurementData data){

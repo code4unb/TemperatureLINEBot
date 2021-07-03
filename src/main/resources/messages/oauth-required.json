@@ -26,7 +26,17 @@
         "action": {
           "type": "uri",
           "label": "入力を完了する",
-          "uri": "%uri"
+          "uri": "%uri1"
+        }
+      },
+      {
+        "type": "button",
+        "style": "link",
+        "height": "sm",
+        "action": {
+          "type": "uri",
+          "label": "権限なしと表示される場合",
+          "uri": "%uri2"
         }
       },
       {
