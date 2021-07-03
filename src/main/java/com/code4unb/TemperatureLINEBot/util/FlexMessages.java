@@ -4,6 +4,7 @@ import com.code4unb.TemperatureLINEBot.model.MeasurementData;
 import com.code4unb.TemperatureLINEBot.model.UserData;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.linecorp.bot.model.action.MessageAction;
 import com.linecorp.bot.model.action.PostbackAction;
 import com.linecorp.bot.model.message.FlexMessage;
 import com.linecorp.bot.model.message.flex.component.*;
@@ -81,7 +82,8 @@ public class FlexMessages {
         contents.add(Separator.builder().margin("xxl").build());
         contents.add(Box.builder().layout(FlexLayout.VERTICAL).contents(
                 Button.builder().action(PostbackAction.builder().label("送信").data("submit").build()).build(),
-                Button.builder().action(PostbackAction.builder().label("修正").data("edit").build()).build()
+                Button.builder().action(PostbackAction.builder().label("修正").data("edit").build()).build(),
+                Button.builder().action(new MessageAction("取り消し","終了")).build()
         ).build());
 
         Box outer_box = Box.builder()
