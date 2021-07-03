@@ -12,7 +12,8 @@ import java.util.Optional;
 @Builder
 @AllArgsConstructor
 public class FlowResult {
-    private Optional<List<Message>> result;
+    @Builder.Default
+    private Optional<List<Message>> result = Optional.empty();
 
     private boolean succeed;
 }
