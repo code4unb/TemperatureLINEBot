@@ -44,6 +44,7 @@ public class MessageController {
 
             for (MessageHandlerBase handler : handlers.values()) {
                 if (handler.shouldHandle(message.getKeyPhrase())) {
+                    log.info(String.format("%s execute command:%s",message.getSource().getUserId(),message.getContent().toString()));
                     return handler.handleMessage(message);
                 }
             }
