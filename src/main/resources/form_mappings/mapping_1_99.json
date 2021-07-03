@@ -9,7 +9,11 @@
     {
       "input_id": "840348863",
       "name":  "AM/PM",
-      "value": "%time_convention"
+      "value": "%time_convention",
+      "choices": {
+        "am": "午前9:00",
+        "pm": "午後16:00"
+      }
     },
     {
       "input_id": "1078510918",

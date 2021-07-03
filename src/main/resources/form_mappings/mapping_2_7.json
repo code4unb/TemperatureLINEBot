@@ -1,0 +1,35 @@
+{
+  "form_id": "e/1FAIpQLSfNszY6lraLLA8geOhoHJWNbAfbX04kdCB3_KyFQuCdofXhHw",
+  "oauth": true,
+  "mappings": [
+    {
+      "input_id": "1678774788",
+      "name":  "AM/PM",
+      "value": "%time_convention",
+      "choices": {
+        "am": "９：００",
+        "pm": "１６：００"
+      }
+    },
+    {
+      "input_id": "1230889273",
+      "name":  "体温",
+      "value": "%temperature"
+    },
+    {
+      "input_id": "343667117",
+      "name":  "症状等",
+      "value": "元気です"
+    },
+    {
+      "input_id": "92520303",
+      "name":  "行動歴",
+      "value": "該当なし"
+    },
+    {
+      "input_id": "1482683055",
+      "name":  "PCR検査",
+      "value": "今までと変わりない。（新たに受けていない）"
+    }
+  ]
+}

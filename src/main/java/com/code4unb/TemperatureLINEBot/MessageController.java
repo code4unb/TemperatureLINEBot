@@ -37,15 +37,19 @@ public class MessageController {
         MessageReply message = MessageReply.Build(event);
 
         Optional<Session> session = sessionManager.findSession(message.getSource().getUserId());
-
-        if(session.isPresent() && !session.get().isExpired() && !((MessageFlow)session.get().getData(FlowMessageHandler.ID_MESSAGE_FLOW)).isCompleted()){
-            return handlers.get((String)session.get().getData(FlowMessageHandler.ID_HANDLER_TYPE)).handleMessage(message);
-        }
-
-        for(MessageHandlerBase handler: handlers.values()){
-            if(handler.shouldHandle(message.getKeyPhrase())){
-                return handler.handleMessage(message);
+        try {
+            if (session.isPresent() && !session.get().isExpired() && !((MessageFlow) session.get().getData(FlowMessageHandler.ID_MESSAGE_FLOW)).isCompleted()) {
+                return handlers.get((String) session.get().getData(FlowMessageHandler.ID_HANDLER_TYPE)).handleMessage(message);
             }
+
+            for (MessageHandlerBase handler : handlers.values()) {
+                if (handler.shouldHandle(message.getKeyPhrase())) {
+                    return handler.handleMessage(message);
+                }
+            }
+        }catch(Exception e){
+            log.error(String.format("Exception occurred when handling message [%s] from %s",message.getContent().toString(),message.getSource().getUserId()));
+            e.printStackTrace();
         }
         return null;
     }

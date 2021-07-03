@@ -52,12 +52,12 @@ public class RegisterMessageHandler extends FlowMessageHandler {
                             }
                             log.info(String.format("Added new user %s-%d-%d",userData.getGrade().toString(),userData.getClass_(),userData.getNumber()));
                             return FlowResult.builder()
-                                    .result(Optional.of(Collections.singletonList(TextMessage.builder().text(userData +" 登録しました。 間違いがある場合は 再度 '登録' と入力してください。").build())))
+                                    .singletonResult(TextMessage.builder().text(userData +" 登録しました。 間違いがある場合は 再度 '登録' と入力してください。").build())
                                     .succeed(true)
                                     .build();
                         }else{
                             return FlowResult.builder()
-                                    .result(Optional.of(Collections.singletonList(TextMessage.builder().text("入力に不備があります。再度入力してください。").build())))
+                                    .singletonResult(TextMessage.builder().text("入力に不備があります。再度入力してください。").build())
                                     .succeed(false)
                                     .build();
                         }
