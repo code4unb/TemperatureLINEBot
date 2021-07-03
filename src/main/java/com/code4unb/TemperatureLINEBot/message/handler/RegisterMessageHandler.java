@@ -57,7 +57,7 @@ public class RegisterMessageHandler extends FlowMessageHandler {
                                     .build();
                         }else{
                             return FlowResult.builder()
-                                    .singletonResult(TextMessage.builder().text("入力に不備があります。再度入力してください。ヒント:スペースで区切るのを忘れていませんか？").build())
+                                    .singletonResult(TextMessage.builder().text("入力に不備があります。再度入力してください。ヒント:苗字と名前をスペースで区切るのを忘れていませんか？").build())
                                     .succeed(false)
                                     .build();
                         }
