@@ -9,10 +9,13 @@ import com.code4unb.TemperatureLINEBot.model.PostbackReply;
 import com.code4unb.TemperatureLINEBot.model.UserData;
 import com.code4unb.TemperatureLINEBot.util.FlexMessages;
 import com.code4unb.TemperatureLINEBot.util.Forms;
+import com.code4unb.TemperatureLINEBot.util.InputMapping;
 import com.linecorp.bot.model.event.source.Source;
+import com.linecorp.bot.model.message.FlexMessage;
 import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.model.message.TextMessage;
 import lombok.extern.slf4j.Slf4j;
+import com.linecorp.bot.model.message.flex.container.FlexContainer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -72,7 +75,16 @@ public class SimpleTemperatureMessageHandler extends FlowMessageHandler {
                     Session session = sessionManager.findOrCreateSession(source.getUserId());
                     MeasurementData data = (MeasurementData) session.getData("measured_data");
                     UserData user = userDataRepository.findByLineID(source.getUserId()).get().toUserData();
-                    return Optional.of(Collections.singletonList(FlexMessages.CreateConfirmSubmitMessage(user,data)));
+                    if(InputMapping.getInstance(user.getClassRoom()).get().isOauthRequired()){
+                        FlexContainer container = FlexMessages.LoadContainerFromJson(FlexMessages.LoadJsonFromJsonFile("oauth-required")
+                                .replace("%uri1",Forms.getSubmitFormUri(user,data,true).toString())
+                                .replace("%uri2",Forms.getAccountChooserUri(user,data,true).toString())
+                        );
+                        sessionManager.removeSession(source.getUserId());
+                        return Optional.of(Collections.singletonList(FlexMessage.builder().altText("URL").contents(container).build()));
+                    }else{
+                        return Optional.of(Collections.singletonList(FlexMessages.CreateConfirmSubmitMessage(user,data)));
+                    }
                 }
 
                 @Override

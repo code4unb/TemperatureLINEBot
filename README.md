@@ -23,12 +23,12 @@
 | SPRING_PROFILES_ACTIVE | dev or prod | dev を設定すればDBが/h2db/に生成される|
 
 ### 環境構築 Docker Compose
-####ビルド
+#### ビルド
 ```
 set SPRING_PROFILES_ACTIVE=prod
 ./gradlew build
 ```
-####UP
+#### UP
 ※注意 ssl通信必須
 ```
 docker-compose -f docker-compose-shared.yml -p "temperaturelinebot_shared" up -d
