@@ -68,6 +68,16 @@ public class SimpleTemperatureMessageHandler extends FlowMessageHandler {
                     Session session = sessionManager.findOrCreateSession(source.getUserId());
                     MeasurementData data = (MeasurementData) session.getData("measured_data");
                     UserData user = userDataRepository.findByLineID(source.getUserId()).get().toUserData();
+                    if(InputMapping.getInstance(user.getClassRoom()).get().isOauthRequired()){
+                        FlexContainer container = FlexMessages.LoadContainerFromJson(FlexMessages.LoadJsonFromJsonFile("oauth-required")
+                                .replace("%uri1",Forms.getSubmitFormUri(user,data,true).toString())
+                                .replace("%uri2",Forms.getAccountChooserUri(user,data,true).toString())
+                        );
+                        sessionManager.removeSession(source.getUserId());
+                        return Optional.of(Collections.singletonList(FlexMessage.builder().altText("URL").contents(container).build()));
+                    }else{
+                        return Optional.of(Collections.singletonList(FlexMessages.CreateConfirmSubmitMessage(user,data)));
+                    }
                     return Optional.of(Collections.singletonList(FlexMessages.CreateConfirmSubmitMessage(user,data)));
                 }
 
