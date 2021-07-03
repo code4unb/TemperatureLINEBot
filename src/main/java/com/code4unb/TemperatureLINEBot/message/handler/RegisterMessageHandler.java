@@ -57,7 +57,7 @@ public class RegisterMessageHandler extends FlowMessageHandler {
                                     .build();
                         }else{
                             return FlowResult.builder()
-                                    .singletonResult(TextMessage.builder().text("入力に不備があります。再度入力してください。").build())
+                                    .singletonResult(TextMessage.builder().text("入力に不備があります。再度入力してください。ヒント:スペースで区切るのを忘れていませんか？").build())
                                     .succeed(false)
                                     .build();
                         }
@@ -73,9 +73,9 @@ public class RegisterMessageHandler extends FlowMessageHandler {
     private UserData tryParse(String lineID,String[] args){
         if(args.length <5) return null;
         try{
-            UserData.Grades grade = UserData.Grades.values()[ Integer.parseInt(args[0])-1];
-            int class_ = Integer.parseInt(args[1]);
-            int number = Integer.parseInt(args[2]);
+            UserData.Grades grade = UserData.Grades.values()[ Integer.parseInt(args[0].replace("年","").replace("組","").replace("番",""))-1];
+            int class_ = Integer.parseInt(args[1].replace("年","").replace("組","").replace("番",""));
+            int number = Integer.parseInt(args[2].replace("年","").replace("組","").replace("番",""));
             String firstName = args[4];
             String lastName = args[3];
             return new UserData(lineID,grade,class_,number,firstName,lastName);

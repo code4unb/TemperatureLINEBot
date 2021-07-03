@@ -70,6 +70,7 @@ public abstract class FlowMessageHandler extends MessageHandlerBase{
 
                 if (message.getKeyPhrase().equalsIgnoreCase("終了")) {
                     sessionManager.removeSession(currentUserId);
+                    log.info(String.format("%s execute child command:終了",message.getSource().getUserId()));
                     return Collections.singletonList(TextMessage.builder()
                             .text("セッションを終了します。")
                             .build());

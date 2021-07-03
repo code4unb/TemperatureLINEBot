@@ -58,7 +58,7 @@ public class SimpleTemperatureMessageHandler extends FlowMessageHandler {
                             int states = Forms.submit(user, ((MeasurementData) session.getData("measured_data")));
                             if(states==200){
                                 log.info("Submission successful");
-                                return FlowResult.builder().succeed(true).result(Collections.singletonList(TextMessage.builder().text("検温を入力しました。").build())).build();
+                                return FlowResult.builder().succeed(true).singletonResult(TextMessage.builder().text("検温を入力しました。").build()).build();
                             }else{
                                 log.error(String.format("Failed to submit measurement data:[response=%d,query=%s]",states,Forms.getEditableFormUri(user,data).toString()));
                                 return FlowResult.builder().succeed(true).result(Arrays.asList(TextMessage.builder().text("検温の入力に失敗しました。").build(),TextMessage.builder().text(Forms.getEditableFormUri(user,data).toString()).build())).build();
@@ -66,7 +66,7 @@ public class SimpleTemperatureMessageHandler extends FlowMessageHandler {
                         case "edit":
                             return FlowResult.builder().succeed(true).result(Arrays.asList(TextMessage.builder().text("次のリンクから修正を行い、ブラウザから送信してください。。※上の送信ボタンは動作しません。").build(),TextMessage.builder().text(Forms.getEditableFormUri(user,data).toString()).build())).build();
                         default:
-                            return FlowResult.builder().succeed(false).result(Collections.singletonList(TextMessage.builder().text("不正な操作が行われました。").build())).build();
+                            return FlowResult.builder().succeed(false).singletonResult(TextMessage.builder().text("不正な操作が行われました。").build()).build();
                     }
                 }
 
