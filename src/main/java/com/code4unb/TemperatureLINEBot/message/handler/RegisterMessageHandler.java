@@ -72,6 +72,7 @@ public class RegisterMessageHandler extends FlowMessageHandler {
 
     private UserData tryParse(String lineID,String[] args){
         if(args.length <5) return null;
+        args = Arrays.stream(args).map(x->x.replace("年","").replace("組","").replace("番","")).toArray(String[]::new);
         try{
             UserData.Grades grade = UserData.Grades.values()[ Integer.parseInt(args[0])-1];
             int class_ = Integer.parseInt(args[1]);
