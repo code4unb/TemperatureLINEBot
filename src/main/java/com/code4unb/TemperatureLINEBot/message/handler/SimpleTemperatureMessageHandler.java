@@ -111,7 +111,7 @@ public class SimpleTemperatureMessageHandler extends FlowMessageHandler {
 
         Optional<Float> parsed = parseFloat(message.getKeyPhrase());
         if (parsed.isPresent() && (33f <= parsed.get() && parsed.get() < 43f)) {
-            MeasurementData data = new MeasurementData(String.valueOf(parsed.get()),LocalDate.now(), MeasurementData.TimeConvention.Now());
+            MeasurementData data = new MeasurementData(String.valueOf(parsed.get()),LocalDate.now(ZoneId.of(ZoneId.SHORT_IDS.get("JST"))), MeasurementData.TimeConvention.Now());
             for(String arg : message.getArgs()){
                 Optional<MeasurementData.TimeConvention> optionalTimeConvention =  MeasurementData.TimeConvention.Parse(arg);
                 if(optionalTimeConvention.isPresent()){
