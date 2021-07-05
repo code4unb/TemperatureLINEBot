@@ -6,6 +6,7 @@ ENV SPRING_PROFILES_ACTIVE prod
 ENV POSTGRES_DB LineBot_Data
 ENV PRODUCTION prod
 ENV POSTGRES_PASSWORD xxx
+ENV JAVA_OPTS -Duser.timezone=Asia/Tokyo
 COPY build/libs/${JAR_FILE} app.jar
 EXPOSE 8080
 ENTRYPOINT [ "sh", "-c", "java ${JAVA_OPTS} -jar /app.jar" ]

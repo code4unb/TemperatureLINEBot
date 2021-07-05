@@ -20,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.format.DateTimeParseException;
 import java.util.Arrays;
 import java.util.Collections;
@@ -119,7 +118,7 @@ public class SimpleTemperatureMessageHandler extends FlowMessageHandler {
                 }
 
                 try{
-                    LocalDate date = LocalDate.parse(LocalDate.now(ZoneId.of(ZoneId.SHORT_IDS.get("JST"))).getYear() + "-" + arg);
+                    LocalDate date = LocalDate.parse(LocalDate.now().getYear() + "-" + arg);
                     data = data.withDate(date);
                 }catch (DateTimeParseException e){
                 }
