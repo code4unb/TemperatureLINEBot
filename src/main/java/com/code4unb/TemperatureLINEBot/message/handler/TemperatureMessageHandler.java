@@ -165,7 +165,7 @@ public class TemperatureMessageHandler extends FlowMessageHandler {
                                     date = LocalDate.now(ZoneId.of(ZoneId.SHORT_IDS.get("JST")));
                                     break;
                                 default:
-                                    date = LocalDate.parse(LocalDate.now(ZoneId.of(ZoneId.SHORT_IDS.get("JST"))).getYear() + "-" + message.getKeyPhrase());
+                                    date = LocalDate.parse(LocalDate.now().getYear() + "-" + message.getKeyPhrase());
                                     break;
                             }
                             Session session = sessionManager.findOrCreateSession(message.getSource().getUserId());
