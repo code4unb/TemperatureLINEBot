@@ -79,7 +79,7 @@ public class MessageFlow {
 
             return resultMessage;
         }else{
-            return result.getResult().get();
+            return result.getResult().orElse(null);
         }
     }
 
