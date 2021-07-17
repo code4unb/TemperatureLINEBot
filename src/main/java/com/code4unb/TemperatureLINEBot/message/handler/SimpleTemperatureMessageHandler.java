@@ -39,7 +39,7 @@ public class SimpleTemperatureMessageHandler extends FlowMessageHandler {
 
     @Override
     public boolean shouldHandle(String phrase){
-        return parseFloat(phrase).isPresent();
+        return parseTemperature(phrase).isPresent();
     }
 
     @Override
@@ -108,8 +108,8 @@ public class SimpleTemperatureMessageHandler extends FlowMessageHandler {
             return Collections.singletonList(TextMessage.builder().text("あなたのホームルームは現在非対応です。開発者まで連絡をいただければあなたのホームルームに対応することが可能です。").build());
         }
 
-        Optional<Float> parsed = parseFloat(message.getKeyPhrase());
-        if (parsed.isPresent() && (33f <= parsed.get() && parsed.get() < 43f)) {
+        Optional<Float> parsed = parseTemperature(message.getKeyPhrase());
+        if (parsed.isPresent()) {
             MeasurementData data = new MeasurementData(String.valueOf(parsed.get()),LocalDate.now(), MeasurementData.TimeConvention.Now());
             for(String arg : message.getArgs()){
                 Optional<MeasurementData.TimeConvention> optionalTimeConvention =  MeasurementData.TimeConvention.Parse(arg);
@@ -133,9 +133,18 @@ public class SimpleTemperatureMessageHandler extends FlowMessageHandler {
         }
     }
 
-    private Optional<Float> parseFloat(String text){
+    private Optional<Float> parseTemperature(String text){
         try{
-            return Optional.of(Float.parseFloat(text));
+            text = text.replace(",",".").replace("、",".");
+            float f = Float.parseFloat(text);
+            if(330f <= f && f < 430f){
+                f /= 10;
+            }
+            if(33f <= f && f < 43f){
+                return Optional.of(f);
+            }else{
+                return Optional.empty();
+            }
         }catch(Exception e){
             return Optional.empty();
         }

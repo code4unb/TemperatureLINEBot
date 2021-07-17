@@ -52,8 +52,8 @@ public class TemperatureMessageHandler extends FlowMessageHandler {
 
                     @Override
                     public FlowResult handle(MessageReply message) {
-                        Optional<Float> parsed = parseFloat(message.getKeyPhrase());
-                        if (parsed.isPresent() && (33f <= parsed.get() && parsed.get() < 43f)) {
+                        Optional<Float> parsed = parseTemperature(message.getKeyPhrase());
+                        if (parsed.isPresent()) {
                             Session session = sessionManager.findOrCreateSession(message.getSource().getUserId());
                             session.addData("measured_data", new MeasurementData(String.format("%.1f", parsed.get()), LocalDate.now(), MeasurementData.TimeConvention.Now()));
                             sessionManager.addSession(message.getSource().getUserId(), session);
@@ -247,9 +247,18 @@ public class TemperatureMessageHandler extends FlowMessageHandler {
         return null;
     }
 
-    private Optional<Float> parseFloat(String text){
+    private Optional<Float> parseTemperature(String text){
         try{
-            return Optional.of(Float.parseFloat(text));
+            text = text.replace(",",".").replace("、",".");
+            float f = Float.parseFloat(text);
+            if(330f <= f && f < 430f){
+                f /= 10;
+            }
+            if(33f <= f && f < 43f){
+                return Optional.of(f);
+            }else{
+                return Optional.empty();
+            }
         }catch(Exception e){
             return Optional.empty();
         }
