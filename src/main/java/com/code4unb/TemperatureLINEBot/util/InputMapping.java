@@ -174,5 +174,11 @@ public class InputMapping {
         Replacer(String text){
             this.text = text;
         }
+
+
+        @Override
+        public String toString() {
+            return "%"+text;
+        }
     }
 }
