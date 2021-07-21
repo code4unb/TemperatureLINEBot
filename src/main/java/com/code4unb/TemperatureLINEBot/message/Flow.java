@@ -8,11 +8,12 @@ import java.util.List;
 import java.util.Optional;
 
 public abstract class Flow {
-    public boolean shouldHandle(String phrase){
+    public boolean shouldHandle(Source source){
         return true;
     }
 
     public abstract Optional<List<Message>> postHandle(Source source);
 
     public abstract FlowResult handle(MessageReply message);
+
 }
