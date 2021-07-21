@@ -92,11 +92,11 @@ public class Forms {
                 x.inputId,
                 x.name,
                 x.value
-                        .replace("%date",data.getDate().toString())
-                        .replace("%time_convention", Objects.toString((data.getConvention() == MeasurementData.TimeConvention.AM ? x.getChoices().get("am") : x.getChoices().get("pm"))))
-                        .replace("%number",String.valueOf(user.getNumber()))
-                        .replace("%name",user.getName())
-                        .replace("%temperature",data.getTemperature())
+                        .replace("%"+ InputMapping.Replacer.DATE,data.getDate().toString())
+                        .replace("%"+ InputMapping.Replacer.TIMECONVENTION, Objects.toString((data.getConvention() == MeasurementData.TimeConvention.AM ? x.getChoices().get("am") : x.getChoices().get("pm"))))
+                        .replace("%"+ InputMapping.Replacer.NUMBER,String.valueOf(user.getNumber()))
+                        .replace("%"+ InputMapping.Replacer.NAME,user.getName())
+                        .replace("%"+ InputMapping.Replacer.TEMPERATURE,data.getTemperature())
         )).collect(Collectors.toCollection(LinkedHashSet::new));
     }
 

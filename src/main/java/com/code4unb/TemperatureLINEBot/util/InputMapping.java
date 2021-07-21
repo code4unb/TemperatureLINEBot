@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.io.*;
@@ -17,6 +18,7 @@ import java.security.CodeSource;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -33,6 +35,8 @@ public class InputMapping {
     @JsonProperty("mappings")
     @JsonDeserialize(as=LinkedHashSet.class)
     private LinkedHashSet<MappingItem> mappingItems;
+
+    private Set<Replacer> replacers;
 
     public static final String DIR = "form_mappings";
 
@@ -100,6 +104,13 @@ public class InputMapping {
         }
     }
 
+    public Set<Replacer> getReplacers(){
+        if(replacers ==null){
+            replacers = mappingItems.stream().flatMap(x->x.getReplacers().stream()).collect(Collectors.toSet());
+        }
+        return replacers;
+    }
+
     public static Optional<InputMapping> getInstance(UserData.ClassRoom classRoom){
         return Optional.ofNullable(mappings.get(classRoom));
     }
@@ -145,5 +156,23 @@ public class InputMapping {
 
         @JsonProperty("choices")
         Map<String,Object> choices = new HashMap<>();
+
+        public Set<Replacer> getReplacers(){
+            return Arrays.stream(Replacer.values()).filter(x->this.getValue().contains(x.text)).collect(Collectors.toSet());
+        }
+    }
+
+    public enum Replacer {
+        TEMPERATURE("temperature"),
+        TIMECONVENTION("time_convention"),
+        NUMBER("number"),
+        NAME("name"),
+        DATE("date");
+
+        @Getter
+        private String text;
+        Replacer(String text){
+            this.text = text;
+        }
     }
 }
