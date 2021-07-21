@@ -15,6 +15,7 @@ services:
       - front
   reverse-proxy:
     image: nginx
+    container_name: "reverse-proxy"
     volumes:
       - /var/reverse-proxy/nginx.conf:/etc/nginx/nginx.conf
     ports:
