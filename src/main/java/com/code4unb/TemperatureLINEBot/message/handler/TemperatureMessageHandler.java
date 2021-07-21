@@ -66,6 +66,13 @@ public class TemperatureMessageHandler extends FlowMessageHandler {
                 new Flow() {
 
                     @Override
+                    public boolean shouldHandle(Source source){
+                        Session session = sessionManager.findOrCreateSession(source.getUserId());
+                        UserData user = (UserData)session.getData("user_data");
+                        return InputMapping.getInstance(user.getClassRoom()).get().getReplacers().contains(InputMapping.Replacer.TIMECONVENTION);
+                    }
+
+                    @Override
                     public Optional<List<Message>> postHandle(Source source) {
                         QuickReply quickReply = QuickReply.builder()
                                 .item(QuickReplyItem.builder().action(new MessageAction("am", "午前")).build())
@@ -88,6 +95,13 @@ public class TemperatureMessageHandler extends FlowMessageHandler {
                     }
                 },
                 new PostBackFlow() {
+
+                    @Override
+                    public boolean shouldHandle(Source source){
+                        Session session = sessionManager.findOrCreateSession(source.getUserId());
+                        UserData user = (UserData)session.getData("user_data");
+                        return InputMapping.getInstance(user.getClassRoom()).get().getReplacers().contains(InputMapping.Replacer.DATE);
+                    }
 
                     @Override
                     public FlowResult handlePostback(PostbackReply reply) {
@@ -181,12 +195,13 @@ public class TemperatureMessageHandler extends FlowMessageHandler {
                     }
                 },
                 new PostBackFlow() {
+
                     @SuppressWarnings("OptionalGetWithoutIsPresent")
                     @Override
                     public FlowResult handlePostback(PostbackReply reply) {
                         Session session = sessionManager.findOrCreateSession(reply.getSource().getUserId());
                         MeasurementData data = (MeasurementData) session.getData("measured_data");
-                        UserData user = userDataRepository.findByLineID(reply.getSource().getUserId()).get().toUserData();
+                        UserData user = (UserData)session.getData("user_data");
                         switch(reply.getData()){
                             case "submit":
                                 int states = Forms.submit(user, ((MeasurementData) session.getData("measured_data")));
@@ -243,6 +258,9 @@ public class TemperatureMessageHandler extends FlowMessageHandler {
             sessionManager.removeSession(message.getSource().getUserId());
             return Collections.singletonList(TextMessage.builder().text("あなたのホームルームは現在非対応です。開発者まで連絡をいただければあなたのホームルームに対応することが可能です。").build());
         }
+
+        Session session = sessionManager.findOrCreateSession(message.getSource().getUserId());
+        session.addData("user_data",data);
 
         return null;
     }
