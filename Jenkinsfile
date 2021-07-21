@@ -81,7 +81,7 @@ pipeline {
           }
           environment {
             PRODUCTION="prod"
-            PUBLISHED_PORT="444"
+            PUBLISHED_PORT="443"
           }
           steps {
             withCredentials([string(credentialsId: 'LINE_BOT_CHANNEL_TOKEN_PROD', variable: 'LINE_BOT_CHANNEL_TOKEN'), string(credentialsId: 'LINE_BOT_CHANNEL_SECRET_PROD', variable: 'LINE_BOT_CHANNEL_SECRET'), string(credentialsId: 'POSTGRES_PASSWORD', variable: 'POSTGRES_PASSWORD')]) {
