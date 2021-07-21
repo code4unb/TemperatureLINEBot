@@ -19,7 +19,7 @@ services:
       - ./reverse-proxy/nginx.conf:/etc/nginx/nginx.conf
     ports:
       - 445:443
-    network:
+    networks:
       - front
 volumes:
   db-data:
