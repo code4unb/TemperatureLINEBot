@@ -23,11 +23,7 @@ public class Forms {
     public static final String ACCOUNT_CHOOSER_URL = "https://accounts.google.com/AccountChooser/signinchooser?continue=%s&service=wise&flowName=GlifWebSignIn&flowEntry=AccountChooser";
 
     public static int submit(UserData user, MeasurementData data){
-        Optional<InputMapping> optionalMapping =  InputMapping.getInstance(user.getClassRoom());
-        if(!optionalMapping.isPresent())return -1;
-        InputMapping mapping = optionalMapping.get();
-
-        HttpClient client = HttpClient.newHttpClient();
+        if(!isAvailableClassroom(user.getClassRoom()))return -1;
 
         try {
             URL url = getSubmitFormUri(user,data).toURL();
