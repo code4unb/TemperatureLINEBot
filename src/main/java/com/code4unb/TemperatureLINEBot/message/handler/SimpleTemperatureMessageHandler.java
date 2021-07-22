@@ -1,6 +1,8 @@
 package com.code4unb.TemperatureLINEBot.message.handler;
 
+import com.code4unb.TemperatureLINEBot.db.SubmissionDataRepository;
 import com.code4unb.TemperatureLINEBot.db.UserDataRepository;
+import com.code4unb.TemperatureLINEBot.db.entity.SubmissionData;
 import com.code4unb.TemperatureLINEBot.db.entity.UserData;
 import com.code4unb.TemperatureLINEBot.message.*;
 import com.code4unb.TemperatureLINEBot.model.MeasurementData;
@@ -18,6 +20,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.Arrays;
@@ -30,6 +34,9 @@ import java.util.Optional;
 public class SimpleTemperatureMessageHandler extends FlowMessageHandler {
     @Autowired
     UserDataRepository userDataRepository;
+
+    @Autowired
+    SubmissionDataRepository submissionDataRepository;
 
     public SimpleTemperatureMessageHandler(){
         super("簡単検温");
@@ -54,6 +61,7 @@ public class SimpleTemperatureMessageHandler extends FlowMessageHandler {
                     switch(reply.getData()){
                         case "submit":
                             int states = Forms.submit(user, ((MeasurementData) session.getData("measured_data")));
+                            submissionDataRepository.save(user.getId(), Timestamp.from(Instant.now()),Forms.createQuery(Forms.createParams(InputMapping.getInstance(user.getClassRoom()).get(),user,data)), SubmissionData.CommandType.NORMAL,String.valueOf(states));
                             if(states==200){
                                 log.info("Submission successful");
                                 return FlowResult.builder().succeed(true).singletonResult(TextMessage.builder().text("検温を入力しました。").build()).build();
@@ -62,6 +70,7 @@ public class SimpleTemperatureMessageHandler extends FlowMessageHandler {
                                 return FlowResult.builder().succeed(true).result(Arrays.asList(TextMessage.builder().text("検温の入力に失敗しました。").build(),TextMessage.builder().text(Forms.getEditableFormUri(user,data).toString()).build())).build();
                             }
                         case "edit":
+                            submissionDataRepository.save(user.getId(), Timestamp.from(Instant.now()),Forms.createQuery(Forms.createParams(InputMapping.getInstance(user.getClassRoom()).get(),user,data)), SubmissionData.CommandType.NORMAL,"edit");
                             return FlowResult.builder().succeed(true).result(Arrays.asList(TextMessage.builder().text("次のリンクから修正を行い、ブラウザから送信してください。。※上の送信ボタンは動作しません。").build(),TextMessage.builder().text(Forms.getEditableFormUri(user,data).toString()).build())).build();
                         default:
                             return FlowResult.builder().succeed(false).singletonResult(TextMessage.builder().text("不正な操作が行われました。").build()).build();
@@ -79,6 +88,7 @@ public class SimpleTemperatureMessageHandler extends FlowMessageHandler {
                                 .replace("%uri2",Forms.getAccountChooserUri(user,data,true).toString())
                         );
                         sessionManager.removeSession(source.getUserId());
+                        submissionDataRepository.save(user.getId(), Timestamp.from(Instant.now()),Forms.createQuery(Forms.createParams(InputMapping.getInstance(user.getClassRoom()).get(),user,data)), SubmissionData.CommandType.NORMAL,"oauth");
                         return Optional.of(Collections.singletonList(FlexMessage.builder().altText("URL").contents(container).build()));
                     }else{
                         return Optional.of(Collections.singletonList(FlexMessages.CreateConfirmSubmitMessage(user,data)));

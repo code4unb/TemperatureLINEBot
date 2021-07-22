@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.net.http.HttpClient;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashSet;
 import java.util.Objects;
@@ -48,7 +47,7 @@ public class Forms {
         if(!optionalMapping.isPresent())return null;
         InputMapping mapping = optionalMapping.get();
         String path = String.format(REQUEST_URL+"viewform",mapping.getFormId());
-        String param = createParams(mapping,user,data).stream().map(x->String.format("entry.%s=%s",x.entry,URLEncoder.encode(x.value,StandardCharsets.UTF_8))).collect(Collectors.joining("&"));
+        String param = createQuery(createParams(mapping,user,data));
         if(openExternalBrowser){
             param += "&openExternalBrowser=1";
         }
@@ -64,7 +63,7 @@ public class Forms {
         if(!optionalMapping.isPresent())return null;
         InputMapping mapping = optionalMapping.get();
         String path = String.format(REQUEST_URL+"formResponse",mapping.getFormId());
-        String param = createParams(mapping,user,data).stream().map(x->String.format("entry.%s=%s",x.entry,URLEncoder.encode(x.value,StandardCharsets.UTF_8))).collect(Collectors.joining("&"));
+        String param = createQuery(createParams(mapping,user,data));
         if(openExternalBrowser){
             param += "&openExternalBrowser=1";
         }
@@ -94,6 +93,10 @@ public class Forms {
                         .replace(InputMapping.Replacer.NAME.toString(),user.getName())
                         .replace(InputMapping.Replacer.TEMPERATURE.toString(),data.getTemperature())
         )).collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+
+    public static String createQuery(Set<FormsParam> params){
+        return params.stream().map(x->String.format("entry.%s=%s",x.entry,URLEncoder.encode(x.value,StandardCharsets.UTF_8))).collect(Collectors.joining("&"));
     }
 
     public static boolean isAvailableClassroom(UserData.ClassRoom classRoom){
