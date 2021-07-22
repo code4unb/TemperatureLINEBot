@@ -1,8 +1,8 @@
 package com.code4unb.TemperatureLINEBot.message.handler;
 
+import com.code4unb.TemperatureLINEBot.db.entity.UserData;
 import com.code4unb.TemperatureLINEBot.message.SingleMessageHandler;
 import com.code4unb.TemperatureLINEBot.model.MessageReply;
-import com.code4unb.TemperatureLINEBot.model.UserData;
 import com.code4unb.TemperatureLINEBot.util.InputMapping;
 import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.model.message.TextMessage;

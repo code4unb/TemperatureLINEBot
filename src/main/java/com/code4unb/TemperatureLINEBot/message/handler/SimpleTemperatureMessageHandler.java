@@ -1,12 +1,11 @@
 package com.code4unb.TemperatureLINEBot.message.handler;
 
 import com.code4unb.TemperatureLINEBot.db.UserDataRepository;
-import com.code4unb.TemperatureLINEBot.db.entity.UserDataEntity;
+import com.code4unb.TemperatureLINEBot.db.entity.UserData;
 import com.code4unb.TemperatureLINEBot.message.*;
 import com.code4unb.TemperatureLINEBot.model.MeasurementData;
 import com.code4unb.TemperatureLINEBot.model.MessageReply;
 import com.code4unb.TemperatureLINEBot.model.PostbackReply;
-import com.code4unb.TemperatureLINEBot.model.UserData;
 import com.code4unb.TemperatureLINEBot.util.FlexMessages;
 import com.code4unb.TemperatureLINEBot.util.Forms;
 import com.code4unb.TemperatureLINEBot.util.InputMapping;
@@ -51,7 +50,7 @@ public class SimpleTemperatureMessageHandler extends FlowMessageHandler {
                 public FlowResult handlePostback(PostbackReply reply) {
                     Session session = sessionManager.findOrCreateSession(reply.getSource().getUserId());
                     MeasurementData data = (MeasurementData) session.getData("measured_data");
-                    UserData user = userDataRepository.findByLineID(reply.getSource().getUserId()).get().toUserData();
+                    UserData user = userDataRepository.findByLineID(reply.getSource().getUserId()).get();
                     switch(reply.getData()){
                         case "submit":
                             int states = Forms.submit(user, ((MeasurementData) session.getData("measured_data")));
@@ -73,7 +72,7 @@ public class SimpleTemperatureMessageHandler extends FlowMessageHandler {
                 public Optional<List<Message>> postHandle(Source source) {
                     Session session = sessionManager.findOrCreateSession(source.getUserId());
                     MeasurementData data = (MeasurementData) session.getData("measured_data");
-                    UserData user = userDataRepository.findByLineID(source.getUserId()).get().toUserData();
+                    UserData user = userDataRepository.findByLineID(source.getUserId()).get();
                     if(InputMapping.getInstance(user.getClassRoom()).get().isOauthRequired()){
                         FlexContainer container = FlexMessages.LoadContainerFromJson(FlexMessages.LoadJsonFromJsonFile("oauth-required")
                                 .replace("%uri1",Forms.getSubmitFormUri(user,data,true).toString())
@@ -96,12 +95,12 @@ public class SimpleTemperatureMessageHandler extends FlowMessageHandler {
 
     @Override
     protected List<Message> handleActivateMessage(MessageReply message) {
-        Optional<UserDataEntity> optional =  userDataRepository.findByLineID(message.getSource().getUserId());
+        Optional<UserData> optional =  userDataRepository.findByLineID(message.getSource().getUserId());
         if(!optional.isPresent()){
             sessionManager.removeSession(message.getSource().getUserId());
             return Collections.singletonList(TextMessage.builder().text("ユーザー登録がされていません。'登録'と入力して登録手続きを行ってください。").build());
         }
-        UserData userData = optional.get().toUserData();
+        UserData userData = optional.get();
 
         if(!Forms.isAvailableClassroom(userData.getClassRoom())){
             sessionManager.removeSession(message.getSource().getUserId());

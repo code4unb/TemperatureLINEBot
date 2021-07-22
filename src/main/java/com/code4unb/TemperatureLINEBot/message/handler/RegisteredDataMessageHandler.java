@@ -1,10 +1,9 @@
 package com.code4unb.TemperatureLINEBot.message.handler;
 
 import com.code4unb.TemperatureLINEBot.db.UserDataRepository;
-import com.code4unb.TemperatureLINEBot.db.entity.UserDataEntity;
+import com.code4unb.TemperatureLINEBot.db.entity.UserData;
 import com.code4unb.TemperatureLINEBot.message.SingleMessageHandler;
 import com.code4unb.TemperatureLINEBot.model.MessageReply;
-import com.code4unb.TemperatureLINEBot.model.UserData;
 import com.code4unb.TemperatureLINEBot.util.FlexMessages;
 import com.linecorp.bot.model.message.FlexMessage;
 import com.linecorp.bot.model.message.Message;
@@ -26,9 +25,9 @@ public class RegisteredDataMessageHandler extends SingleMessageHandler {
     }
     @Override
     public List<Message> handleMessage(MessageReply message) {
-        Optional<UserDataEntity> entity = userDataRepository.findByLineID(message.getSource().getUserId());
+        Optional<UserData> entity = userDataRepository.findByLineID(message.getSource().getUserId());
         if(entity.isPresent()){
-            UserData data = entity.get().toUserData();
+            UserData data = entity.get();
             String json = FlexMessages.LoadJsonFromJsonFile("registered-data");
             json = String.format(json,data.getLastName(),data.getFirstName(),data.getGrade().ordinal()+1,data.getClass_(),data.getNumber());
             return Collections.singletonList(new FlexMessage("registered-data", FlexMessages.LoadContainerFromJson(json)));

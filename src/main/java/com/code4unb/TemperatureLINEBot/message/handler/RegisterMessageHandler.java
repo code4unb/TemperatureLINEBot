@@ -1,12 +1,11 @@
 package com.code4unb.TemperatureLINEBot.message.handler;
 
 import com.code4unb.TemperatureLINEBot.db.UserDataRepository;
-import com.code4unb.TemperatureLINEBot.db.entity.UserDataEntity;
+import com.code4unb.TemperatureLINEBot.db.entity.UserData;
 import com.code4unb.TemperatureLINEBot.message.Flow;
 import com.code4unb.TemperatureLINEBot.message.FlowMessageHandler;
 import com.code4unb.TemperatureLINEBot.message.FlowResult;
 import com.code4unb.TemperatureLINEBot.model.MessageReply;
-import com.code4unb.TemperatureLINEBot.model.UserData;
 import com.code4unb.TemperatureLINEBot.util.FlexMessages;
 import com.linecorp.bot.model.event.source.Source;
 import com.linecorp.bot.model.message.FlexMessage;
@@ -44,11 +43,11 @@ public class RegisterMessageHandler extends FlowMessageHandler {
                     public FlowResult handle(MessageReply message) {
                         UserData userData;
                         if((userData =  tryParse(message.getSource().getUserId(),message.getPhrases())) !=null){
-                            Optional<UserDataEntity> found = userDataRepository.findByLineID(userData.getLineID());
+                            Optional<UserData> found = userDataRepository.findByLineID(userData.getLineId());
                             if(found.isPresent()){
-                                userDataRepository.save(new UserDataEntity(found.get().getId(),userData));
+                                userDataRepository.save(userData.withId(found.get().getId()));
                             }else{
-                                userDataRepository.save(new UserDataEntity(userData));
+                                userDataRepository.save(userData);
                             }
                             log.info(String.format("Added new user %s-%d-%d",userData.getGrade().toString(),userData.getClass_(),userData.getNumber()));
                             return FlowResult.builder()
@@ -70,7 +69,7 @@ public class RegisterMessageHandler extends FlowMessageHandler {
         return Collections.singletonList(new FlexMessage("register", FlexMessages.LoadContainerFromJsonFile("register")));
     }
 
-    private UserData tryParse(String lineID,String[] args){
+    private UserData tryParse(String lineID, String[] args){
         if(args.length <5) return null;
         try{
             UserData.Grades grade = UserData.Grades.values()[ Integer.parseInt(args[0].replace("年","").replace("組","").replace("番",""))-1];

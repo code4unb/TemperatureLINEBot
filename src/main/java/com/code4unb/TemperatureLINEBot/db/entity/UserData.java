@@ -1,7 +1,6 @@
 package com.code4unb.TemperatureLINEBot.db.entity;
 
-import com.code4unb.TemperatureLINEBot.model.UserData;
-import com.code4unb.TemperatureLINEBot.model.UserData.Grades;
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.With;
@@ -13,7 +12,7 @@ import org.springframework.data.relational.core.mapping.Table;
 @Table("user_data")
 @Getter
 @EqualsAndHashCode(of = {"id"})
-public class UserDataEntity {
+public class UserData {
     @Column("id")
     @Id
     @With
@@ -40,8 +39,16 @@ public class UserDataEntity {
     @Column("last_name")
     private final String lastName;
 
+    public ClassRoom getClassRoom(){
+        return new ClassRoom(grade, class_);
+    }
+
+    public String getName(){
+        return lastName+" "+firstName;
+    }
+
     @PersistenceConstructor
-    public UserDataEntity(int id,String lineId,Grades grade,int class_,int number,String firstName,String lastName){
+    public UserData(int id, String lineId, Grades grade, int class_, int number, String firstName, String lastName){
         this.id = id;
         this.lineId = lineId;
         this.grade = grade;
@@ -50,13 +57,33 @@ public class UserDataEntity {
         this.firstName = firstName;
         this.lastName = lastName;
     }
-    public UserDataEntity(int id,UserData data){
-        this(id,data.getLineID(),data.getGrade(),data.getClass_(),data.getNumber(),data.getFirstName(),data.getLastName());
+
+    public UserData(String lineId, Grades grade, int class_, int number, String firstName, String lastName){
+        this(0,lineId,grade,class_,number,firstName,lastName);
     }
-    public UserDataEntity(UserData data){
-        this(0,data);
+
+    @Override
+    public String toString(){
+        return grade.ordinal()+1+"年"+class_+"組"+number+"番"+lastName+" "+firstName;
     }
-    public UserData toUserData(){
-        return new UserData(getLineId(),getGrade(),getClass_(),getNumber(),getFirstName(),getLastName());
+
+    @Getter
+    @AllArgsConstructor
+    @EqualsAndHashCode
+    public static class ClassRoom{
+        private final Grades grade;
+
+        private final int class_;
+
+        @Override
+        public String toString(){
+            return grade.ordinal()+1+"-"+class_;
+        }
+    }
+
+    public enum Grades {
+        First,
+        Second,
+        Third;
     }
 }

@@ -1,7 +1,7 @@
 package com.code4unb.TemperatureLINEBot.util;
 
+import com.code4unb.TemperatureLINEBot.db.entity.UserData;
 import com.code4unb.TemperatureLINEBot.model.MeasurementData;
-import com.code4unb.TemperatureLINEBot.model.UserData;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.linecorp.bot.model.action.MessageAction;

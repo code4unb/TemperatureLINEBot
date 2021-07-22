@@ -1,7 +1,7 @@
 package com.code4unb.TemperatureLINEBot.util;
 
+import com.code4unb.TemperatureLINEBot.db.entity.UserData;
 import com.code4unb.TemperatureLINEBot.model.MeasurementData;
-import com.code4unb.TemperatureLINEBot.model.UserData;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
