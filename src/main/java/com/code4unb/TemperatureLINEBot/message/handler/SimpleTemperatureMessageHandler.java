@@ -61,7 +61,7 @@ public class SimpleTemperatureMessageHandler extends FlowMessageHandler {
                     switch(reply.getData()){
                         case "submit":
                             int states = Forms.submit(user, ((MeasurementData) session.getData("measured_data")));
-                            submissionDataRepository.save(user.getId(), Timestamp.from(Instant.now()),Forms.createQuery(Forms.createParams(InputMapping.getInstance(user.getClassRoom()).get(),user,data)), SubmissionData.CommandType.NORMAL,String.valueOf(states));
+                            submissionDataRepository.save(user.getId(), Timestamp.from(Instant.now()),Forms.createQuery(Forms.createParams(InputMapping.getInstance(user.getClassRoom()).get(),user,data)), SubmissionData.CommandType.SIMPLE,String.valueOf(states));
                             if(states==200){
                                 log.info("Submission successful");
                                 return FlowResult.builder().succeed(true).singletonResult(TextMessage.builder().text("検温を入力しました。").build()).build();
