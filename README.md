@@ -44,9 +44,3 @@ docker-compose -f docker-compose-shared.yml -p "temperaturelinebot_shared" up -d
 | PRODUCTION | prod/dev | prodの場合バージョンがSNAPSHOTになる|
 | POSTGRES_PASSWORD | 任意 | DBのパスワード|
 | PUBLISHED_PORT | 443 | exposeされるポート|
-
-### コーディングルール
-
-### コミットガイドライン
-コミットルールは基本的に *[Angular.jsのもの](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#-git-commit-guidelines)* に準じます。  
-また、コミットメッセージは英語を基本とします。
